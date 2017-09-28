@@ -3,9 +3,8 @@ package cn.edots.nest.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.edots.slug.annotation.Slug;
-
 import cn.edots.nest.R;
+import cn.edots.slug.annotation.Slug;
 
 /**
  * @author Parck.
