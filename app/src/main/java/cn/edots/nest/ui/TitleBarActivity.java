@@ -43,7 +43,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     private void initView() {
-        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        appBarLayout = (AppBarLayout) findViewById(R.id.title_bar_layout);
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         backButton = (ImageView) findViewById(R.id.back_btn);
         leftTitle = (TextView) findViewById(R.id.left_title_text);
