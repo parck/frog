@@ -48,7 +48,7 @@ public abstract class TitleBarActivity extends BaseActivity {
         rightText = (TextView) findViewById(R.id.right_text_btn);
         contentLayout = (FrameLayout) findViewById(R.id.content_layout);
 
-        setBackButtonImageResource(((SlugApplication) THIS.getApplication()).getBackButtonImageResource());
+        setBackButtonImageResource(((SlugApplication) this.getApplication()).getBackButtonImageResource());
     }
 
     private void initListener() {
