@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.edots.nest.R;
+import cn.edots.nest.SlugApplication;
 
 /**
  * @author Parck.
@@ -46,9 +47,12 @@ public abstract class TitleBarActivity extends BaseActivity {
         rightButton = (ImageView) findViewById(R.id.right_image_btn);
         rightText = (TextView) findViewById(R.id.right_text_btn);
         contentLayout = (FrameLayout) findViewById(R.id.content_layout);
+
+        setBackButtonImageResource(((SlugApplication) THIS.getApplication()).getBackButtonImageResource());
     }
 
     private void initListener() {
+        backButton.setOnClickListener(this);
     }
 
     @Override
@@ -78,6 +82,14 @@ public abstract class TitleBarActivity extends BaseActivity {
                     onBack();
                 break;
         }
+    }
+
+    protected void setTitleBarColor(@ColorRes int resId) {
+        toolbar.setBackgroundColor(THIS.getResources().getColor(resId));
+    }
+
+    protected void setBackButtonImageResource(@DrawableRes int resId) {
+        backButton.setImageResource(resId);
     }
 
     protected void setLeftTitleContent(CharSequence title) {
@@ -131,5 +143,4 @@ public abstract class TitleBarActivity extends BaseActivity {
     protected void setOnBackButtonClickListener(View.OnClickListener listener) {
         backButton.setOnClickListener(listener);
     }
-
 }
