@@ -1,6 +1,5 @@
 package cn.edots.nest;
 
-import android.app.Application;
 import android.support.annotation.DrawableRes;
 
 /**
@@ -9,9 +8,8 @@ import android.support.annotation.DrawableRes;
  * @desc
  */
 
-public abstract class SlugApplication extends Application {
+public interface SlugResourceProvider {
 
-    public abstract
     @DrawableRes
     int getBackButtonImageResource();
 }

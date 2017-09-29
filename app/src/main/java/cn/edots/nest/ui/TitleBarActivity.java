@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.edots.nest.R;
-import cn.edots.nest.SlugApplication;
+import cn.edots.nest.SlugResourceProvider;
 
 /**
  * @author Parck.
@@ -48,7 +48,10 @@ public abstract class TitleBarActivity extends BaseActivity {
         rightText = (TextView) findViewById(R.id.right_text_btn);
         contentLayout = (FrameLayout) findViewById(R.id.content_layout);
 
-        setBackButtonImageResource(((SlugApplication) this.getApplication()).getBackButtonImageResource());
+        SlugResourceProvider resourceProvider = (SlugResourceProvider) this.getApplication();
+        if (resourceProvider == null)
+            throw new NullPointerException("this Application has not implements SlugResourceProvider interface");
+        setBackButtonImageResource(resourceProvider.getBackButtonImageResource());
     }
 
     private void initListener() {
