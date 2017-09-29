@@ -52,7 +52,15 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     private void initListener() {
-        backButton.setOnClickListener(this);
+        setOnBackButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isBackToExit())
+                    onExit();
+                else
+                    onBack();
+            }
+        });
     }
 
     @Override
@@ -69,19 +77,6 @@ public abstract class TitleBarActivity extends BaseActivity {
     public void setContentView(View view, ViewGroup.LayoutParams params) {
         contentLayout.removeAllViews();
         contentLayout.addView(view, params);
-    }
-
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        switch (v.getId()) {
-            case R.id.back_btn:
-                if (isBackToExit())
-                    onExit();
-                else
-                    onBack();
-                break;
-        }
     }
 
     protected void setTitleBarColor(@ColorRes int resId) {
