@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BaseTransientBottomBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -82,6 +84,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
     }
 
+    protected void TOAST(CharSequence message) {
+        Toast.makeText(THIS, message, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void TOAST(CharSequence message, @BaseTransientBottomBar.Duration int duration) {
+        Toast.makeText(THIS, message, duration).show();
+    }
+    
     public void startActivity(Class<? extends Activity> clazz) {
         THIS.startActivity(new Intent(THIS, clazz));
     }
@@ -91,4 +101,5 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         intent.putExtra(INTENT_DATA, data);
         THIS.startActivity(intent);
     }
+
 }
