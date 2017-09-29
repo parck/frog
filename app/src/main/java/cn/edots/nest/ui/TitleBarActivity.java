@@ -35,8 +35,8 @@ public abstract class TitleBarActivity extends BaseActivity {
         super.setContentView(R.layout.activity_base_title_bar);
         initView();
         initListener();
-        super.onCreate(savedInstanceState);
         setSupportActionBar(toolbar);
+        super.onCreate(savedInstanceState);
     }
 
     private void initView() {
