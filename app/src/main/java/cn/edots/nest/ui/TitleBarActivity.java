@@ -29,7 +29,6 @@ public abstract class TitleBarActivity extends BaseActivity {
     protected ImageView rightButton;
     protected TextView rightText;
     protected FrameLayout contentLayout;
-    private int statusPXHeight;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,11 +47,6 @@ public abstract class TitleBarActivity extends BaseActivity {
         rightButton = (ImageView) findViewById(R.id.right_image_btn);
         rightText = (TextView) findViewById(R.id.right_text_btn);
         contentLayout = (FrameLayout) findViewById(R.id.content_layout);
-
-        if (this.isTranslucentStatus()) {
-            statusPXHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height", "dimen", "android"));
-            this.setLayoutMargins(getWindow().getDecorView().findViewById(android.R.id.content), 0, statusPXHeight, 0, 0);
-        }
 
         SlugResourceProvider resourceProvider = (SlugResourceProvider) this.getApplication();
         if (resourceProvider == null)
@@ -146,13 +140,5 @@ public abstract class TitleBarActivity extends BaseActivity {
      */
     protected void setOnBackButtonClickListener(View.OnClickListener listener) {
         backButton.setOnClickListener(listener);
-    }
-
-    protected void setLayoutMargins(View v, int left, int top, int right, int bottom) {
-        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            p.setMargins(left, top, right, bottom);
-            v.requestLayout();
-        }
     }
 }
