@@ -5,6 +5,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import cn.edots.nest.SlugResourceProvider;
  */
 public abstract class TitleBarActivity extends BaseActivity {
 
+    protected AppBarLayout appBarLayout;
     protected Toolbar toolbar;
     protected ImageView backButton;
     protected TextView leftTitle;
@@ -29,6 +31,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     protected ImageView rightButton;
     protected TextView rightText;
     protected FrameLayout contentLayout;
+    private int statusPXHeight;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +43,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     private void initView() {
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         backButton = (ImageView) findViewById(R.id.back_btn);
         leftTitle = (TextView) findViewById(R.id.left_title_text);
@@ -47,6 +51,11 @@ public abstract class TitleBarActivity extends BaseActivity {
         rightButton = (ImageView) findViewById(R.id.right_image_btn);
         rightText = (TextView) findViewById(R.id.right_text_btn);
         contentLayout = (FrameLayout) findViewById(R.id.content_layout);
+
+        if (this.isTranslucentStatus()) {
+            statusPXHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height", "dimen", "android"));
+            this.setLayoutMargins(appBarLayout, 0, statusPXHeight, 0, 0);
+        }
 
         SlugResourceProvider resourceProvider = (SlugResourceProvider) this.getApplication();
         if (resourceProvider == null)
@@ -140,5 +149,13 @@ public abstract class TitleBarActivity extends BaseActivity {
      */
     protected void setOnBackButtonClickListener(View.OnClickListener listener) {
         backButton.setOnClickListener(listener);
+    }
+
+    protected void setLayoutMargins(View v, int left, int top, int right, int bottom) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins(left, top, right, bottom);
+            v.requestLayout();
+        }
     }
 }

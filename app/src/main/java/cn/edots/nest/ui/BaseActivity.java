@@ -1,11 +1,13 @@
 package cn.edots.nest.ui;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import cn.edots.nest.log.Logger;
 import cn.edots.slug.core.activity.SlugBinder;
@@ -27,6 +29,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && isTranslucentStatus()) {
+            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+        }
         super.onCreate(savedInstanceState);
         this.THIS = this;
         init();
@@ -60,6 +66,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected void onBack() {
         finish();
+    }
+
+    protected boolean isTranslucentStatus() {
+        return false;
     }
 
     protected boolean isBackToExit() {
