@@ -5,7 +5,6 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import cn.edots.nest.SlugResourceProvider;
  */
 public abstract class TitleBarActivity extends BaseActivity {
 
-    protected AppBarLayout appBarLayout;
     protected Toolbar toolbar;
     protected ImageView backButton;
     protected TextView leftTitle;
@@ -43,7 +41,6 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     private void initView() {
-        appBarLayout = (AppBarLayout) findViewById(R.id.title_bar_layout);
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         backButton = (ImageView) findViewById(R.id.back_btn);
         leftTitle = (TextView) findViewById(R.id.left_title_text);
@@ -54,7 +51,7 @@ public abstract class TitleBarActivity extends BaseActivity {
 
         if (this.isTranslucentStatus()) {
             statusPXHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height", "dimen", "android"));
-            this.setLayoutMargins(appBarLayout, 0, statusPXHeight, 0, 0);
+            this.setLayoutMargins(getWindow().getDecorView().findViewById(android.R.id.content), 0, statusPXHeight, 0, 0);
         }
 
         SlugResourceProvider resourceProvider = (SlugResourceProvider) this.getApplication();
