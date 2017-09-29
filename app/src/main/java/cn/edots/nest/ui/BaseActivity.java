@@ -1,6 +1,7 @@
 package cn.edots.nest.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+
+import java.util.HashMap;
 
 import cn.edots.nest.log.Logger;
 import cn.edots.slug.core.activity.SlugBinder;
@@ -18,12 +21,12 @@ import cn.edots.slug.core.activity.SlugBinder;
  * @date 2017/9/28.
  * @desc
  */
-
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
 
     protected final String TAG = this.getClass().getSimpleName();
-    protected Logger logger = new Logger(TAG);
-    protected Activity THIS;
+    protected final Logger logger = new Logger(TAG);
+    protected final String INTENT_DATA = "INTENT_DATA";
+    protected final Activity THIS = this;
 
     protected SlugBinder sbinder;
 
@@ -34,7 +37,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
         }
         super.onCreate(savedInstanceState);
-        this.THIS = this;
         init();
     }
 
@@ -78,6 +80,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
+    }
 
+    public void startActivity(Class<? extends Activity> clazz) {
+        THIS.startActivity(new Intent(THIS, clazz));
+    }
+
+    public void startActivity(Class<? extends Activity> clazz, HashMap<String, Object> data) {
+        Intent intent = new Intent(THIS, clazz);
+        intent.putExtra(INTENT_DATA, data);
+        THIS.startActivity(intent);
     }
 }
