@@ -1,5 +1,6 @@
 package cn.edots.nest.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -20,12 +21,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected final String TAG = this.getClass().getSimpleName();
     protected Logger logger = new Logger(TAG);
+    protected Activity THIS;
 
     protected SlugBinder sbinder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.THIS = this;
         init();
     }
 
@@ -55,11 +58,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     }
 
-    private void onBack() {
+    protected void onBack() {
 
     }
 
-    private boolean isBackToExit() {
+    protected boolean isBackToExit() {
         return false;
     }
 
