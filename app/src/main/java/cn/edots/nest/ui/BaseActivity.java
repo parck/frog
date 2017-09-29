@@ -59,7 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     protected void onBack() {
-
+        finish();
     }
 
     protected boolean isBackToExit() {
