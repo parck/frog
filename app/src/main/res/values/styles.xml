@@ -1,8 +1,8 @@
 <resources>
 
-    <style name="NestTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowNoTitle">true</item>
-    </style>
+    <!--<style name="NestTheme" parent="Theme.AppCompat.Light.NoActionBar">
+          <item name="windowNoTitle">true</item>
+          <item name="android:windowNoTitle">true</item>
+      </style>-->
 
 </resources>
