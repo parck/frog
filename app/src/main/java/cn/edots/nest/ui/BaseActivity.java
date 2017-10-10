@@ -8,12 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.HashMap;
 
+import cn.edots.nest.Standardize;
 import cn.edots.nest.log.Logger;
 import cn.edots.slug.core.activity.SlugBinder;
 
@@ -45,6 +47,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     private void init() {
         sbinder = SlugBinder.getInstance(this);
         logger.i("SlugBinder Init Successful!");
+        if (THIS instanceof Standardize) {
+            ((Standardize) THIS).setupData();
+            ((Standardize) THIS).initView();
+            ((Standardize) THIS).setListeners();
+            ((Standardize) THIS).onCreateLast();
+        }
     }
 
     @Override
@@ -91,7 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected void TOAST(CharSequence message, @BaseTransientBottomBar.Duration int duration) {
         Toast.makeText(THIS, message, duration).show();
     }
-    
+
     public void startActivity(Class<? extends Activity> clazz) {
         THIS.startActivity(new Intent(THIS, clazz));
     }
@@ -102,4 +110,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         THIS.startActivity(intent);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        return super.dispatchTouchEvent(event);
+    }
 }

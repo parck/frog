@@ -47,11 +47,12 @@ public abstract class TitleBarActivity extends BaseActivity {
         rightButton = (ImageView) findViewById(R.id.right_image_btn);
         rightText = (TextView) findViewById(R.id.right_text_btn);
         contentLayout = (FrameLayout) findViewById(R.id.content_layout);
-
-        SlugResourceProvider resourceProvider = (SlugResourceProvider) this.getApplication();
-        if (resourceProvider == null)
-            throw new NullPointerException("this Application has not implements SlugResourceProvider interface");
-        setBackButtonImageResource(resourceProvider.getBackButtonImageResource());
+        try {
+            SlugResourceProvider resourceProvider = (SlugResourceProvider) this.getApplication();
+            setBackButtonImageResource(resourceProvider.getBackButtonImageResource());
+        } catch (ClassCastException e) {
+            throw new ClassCastException("this Application has not implements SlugResourceProvider interface");
+        }
     }
 
     private void initListener() {
@@ -115,7 +116,7 @@ public abstract class TitleBarActivity extends BaseActivity {
         rightButton.setImageResource(resId);
     }
 
-    protected void setRightButtonListener(View.OnClickListener listener) {
+    protected void setOnRightButtonListener(View.OnClickListener listener) {
         rightButton.setOnClickListener(listener);
     }
 
@@ -129,7 +130,7 @@ public abstract class TitleBarActivity extends BaseActivity {
         rightText.setTextColor(THIS.getResources().getColor(resId));
     }
 
-    protected void setRightTextListener(View.OnClickListener listener) {
+    protected void setOnRightTextListener(View.OnClickListener listener) {
         rightText.setOnClickListener(listener);
     }
 
