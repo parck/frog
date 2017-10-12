@@ -12,7 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import cn.edots.nest.SlugResourceProvider;
+import cn.edots.nest.Standardize;
+import cn.edots.nest.log.Logger;
 import cn.edots.slug.core.fragment.SlugBinder;
 
 /**
@@ -23,20 +27,37 @@ import cn.edots.slug.core.fragment.SlugBinder;
 
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
 
+    protected final String TAG = this.getClass().getSimpleName();
     protected Fragment THIS;
-    protected SlugBinder sbinder;
+    protected Activity activity;
+    protected Logger logger;
     protected final String INTENT_DATA = "INTENT_DATA";
+    protected SlugBinder sbinder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         THIS = this;
+        activity = THIS.getActivity();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        try {
+            SlugResourceProvider resourceProvider = (SlugResourceProvider) activity.getApplication();
+            logger = new Logger(TAG, resourceProvider.isDebug());
+        } catch (ClassCastException e) {
+            throw new ClassCastException("This application has not implements \"SlugResourceProvider\"");
+        }
         sbinder = SlugBinder.getInstance(THIS, container);
+        logger.i("SlugBinder Init Successful!");
+        if (THIS instanceof Standardize) {
+            ((Standardize) THIS).setupData((Map<String, Object>) activity.getIntent().getSerializableExtra(INTENT_DATA));
+            ((Standardize) THIS).initView();
+            ((Standardize) THIS).setListeners();
+            ((Standardize) THIS).onCreateLast();
+        }
         return sbinder.getContentView();
     }
 

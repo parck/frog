@@ -1,7 +1,10 @@
 package cn.edots.nest.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,11 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import cn.edots.nest.SlugResourceProvider;
 import cn.edots.nest.Standardize;
 import cn.edots.nest.log.Logger;
 import cn.edots.slug.core.activity.SlugBinder;
@@ -27,28 +33,42 @@ import cn.edots.slug.core.activity.SlugBinder;
  */
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    protected final String TAG = this.getClass().getSimpleName();
-    protected final Logger logger = new Logger(TAG);
-    protected final String INTENT_DATA = "INTENT_DATA";
-    protected final Activity THIS = this;
+    protected static final String EXIT_ACTION = "EXIT_ACTION";
+    protected static final String INTENT_DATA = "INTENT_DATA";
 
+    protected final Activity THIS = this;
+    protected final String TAG = this.getClass().getSimpleName();
+    protected final ExitReceiver exitReceiver = new ExitReceiver();
+
+    protected Logger logger;
     protected SlugBinder sbinder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        try {
+            SlugResourceProvider resourceProvider = (SlugResourceProvider) THIS.getApplication();
+            logger = new Logger(TAG, resourceProvider.isDebug());
+        } catch (ClassCastException e) {
+            throw new ClassCastException("This application has not implements \"SlugResourceProvider\"");
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && isTranslucentStatus()) {
             WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
             localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+        }
+        if (isFeatureNoTitle()) {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         super.onCreate(savedInstanceState);
         init();
     }
 
     private void init() {
+        registerExitReceiver();
         sbinder = SlugBinder.getInstance(this);
         logger.i("SlugBinder Init Successful!");
         if (THIS instanceof Standardize) {
-            ((Standardize) THIS).setupData();
+            ((Standardize) THIS).setupData((Map<String, Object>) getIntent().getSerializableExtra(INTENT_DATA));
             ((Standardize) THIS).initView();
             ((Standardize) THIS).setListeners();
             ((Standardize) THIS).onCreateLast();
@@ -58,7 +78,18 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterExitReceiver();
         sbinder.finish();
+    }
+
+    private void registerExitReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(EXIT_ACTION);
+        registerReceiver(exitReceiver, filter);
+    }
+
+    private void unregisterExitReceiver() {
+        unregisterReceiver(exitReceiver);
     }
 
     @Override
@@ -73,7 +104,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     protected void onExit() {
-
+        Intent exitIntent = new Intent();
+        exitIntent.setAction(EXIT_ACTION);
+        THIS.sendBroadcast(exitIntent);
     }
 
     protected void onBack() {
@@ -81,6 +114,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     protected boolean isTranslucentStatus() {
+        return false;
+    }
+
+    protected boolean isFeatureNoTitle() {
         return false;
     }
 
@@ -118,5 +155,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         return super.dispatchTouchEvent(event);
+    }
+
+
+    class ExitReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (EXIT_ACTION.equals(intent.getAction())) THIS.finish();
+        }
+
     }
 }

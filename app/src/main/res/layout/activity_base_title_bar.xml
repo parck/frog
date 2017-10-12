@@ -22,7 +22,8 @@
                 <ImageView
                     android:id="@+id/back_btn"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:padding="5dp" />
 
                 <TextView
                     android:id="@+id/left_title_text"
@@ -31,8 +32,9 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/back_btn"
+                    android:padding="5dp"
                     android:text="TITLE"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/default_text_color"
                     android:textSize="16sp"
                     android:visibility="gone" />
 
@@ -42,7 +44,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="15dp"
-                    android:textColor="#FFFFFF"
+                    android:padding="5dp"
+                    android:textColor="@color/default_text_color"
                     android:textSize="16sp"
                     android:visibility="gone" />
 
@@ -51,6 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:padding="5dp"
                     android:visibility="gone" />
 
                 <TextView
@@ -58,8 +62,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:textColor="#FFFFFF"
+                    android:padding="5dp"
+                    android:textColor="@color/default_text_color"
                     android:textSize="14sp"
                     android:visibility="gone" />
 

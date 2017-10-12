@@ -10,6 +10,8 @@ import android.support.annotation.DrawableRes;
 
 public interface SlugResourceProvider {
 
+    boolean isDebug();
+
     @DrawableRes
     int getBackButtonImageResource();
 }

@@ -2,6 +2,7 @@ package cn.edots.nest.ui;
 
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
+import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -21,6 +22,16 @@ import cn.edots.nest.SlugResourceProvider;
  * @desc
  */
 public abstract class TitleBarActivity extends BaseActivity {
+
+    public static final int _18DP = R.dimen.text_size_18_dp;
+    public static final int _17DP = R.dimen.text_size_17_dp;
+    public static final int _16DP = R.dimen.text_size_16_dp;
+    public static final int _15DP = R.dimen.text_size_15_dp;
+    public static final int _14DP = R.dimen.text_size_14_dp;
+    public static final int _13DP = R.dimen.text_size_13_dp;
+    public static final int _12DP = R.dimen.text_size_12_dp;
+    public static final int _11DP = R.dimen.text_size_11_dp;
+    public static final int _10DP = R.dimen.text_size_10_dp;
 
     protected Toolbar toolbar;
     protected ImageView backButton;
@@ -51,7 +62,7 @@ public abstract class TitleBarActivity extends BaseActivity {
             SlugResourceProvider resourceProvider = (SlugResourceProvider) this.getApplication();
             setBackButtonImageResource(resourceProvider.getBackButtonImageResource());
         } catch (ClassCastException e) {
-            throw new ClassCastException("this Application has not implements SlugResourceProvider interface");
+            throw new ClassCastException("This application has not implements \"SlugResourceProvider\"");
         }
     }
 
@@ -59,10 +70,8 @@ public abstract class TitleBarActivity extends BaseActivity {
         setOnBackButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isBackToExit())
-                    onExit();
-                else
-                    onBack();
+                if (isBackToExit()) onExit();
+                else onBack();
             }
         });
     }
@@ -96,9 +105,14 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setLeftTitleContent(CharSequence title, @ColorRes int resId) {
+        setLeftTitleContent(title, resId, _16DP);
+    }
+
+    protected void setLeftTitleContent(CharSequence title, @ColorRes int cresId, @DimenRes int dresId) {
         leftTitle.setVisibility(View.VISIBLE);
         leftTitle.setText(title);
-        leftTitle.setTextColor(THIS.getResources().getColor(resId));
+        leftTitle.setTextSize(getResources().getDimension(dresId));
+        leftTitle.setTextColor(THIS.getResources().getColor(cresId));
     }
 
     protected void setCenterTitleContent(CharSequence title) {
@@ -106,9 +120,14 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setCenterTitleContent(CharSequence title, @ColorRes int resId) {
+        setCenterTitleContent(title, resId, _16DP);
+    }
+
+    protected void setCenterTitleContent(CharSequence title, @ColorRes int cresId, @DimenRes int dresId) {
         centerTitle.setVisibility(View.VISIBLE);
         centerTitle.setText(title);
-        centerTitle.setTextColor(THIS.getResources().getColor(resId));
+        centerTitle.setTextColor(THIS.getResources().getColor(cresId));
+        centerTitle.setTextSize(THIS.getResources().getDimension(dresId));
     }
 
     protected void setRightButtonImageResource(@DrawableRes int resId) {
@@ -125,9 +144,14 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setRightTextContent(CharSequence text, @ColorRes int resId) {
+        setRightTextContent(text, R.color.default_text_color, _14DP);
+    }
+
+    protected void setRightTextContent(CharSequence text, @ColorRes int cresId, @DimenRes int dresId) {
         rightText.setVisibility(View.VISIBLE);
         rightText.setText(text);
-        rightText.setTextColor(THIS.getResources().getColor(resId));
+        rightText.setTextColor(THIS.getResources().getColor(cresId));
+        rightText.setTextSize(THIS.getResources().getDimension(dresId));
     }
 
     protected void setOnRightTextListener(View.OnClickListener listener) {

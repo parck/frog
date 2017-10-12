@@ -1,5 +1,9 @@
 package cn.edots.nest;
 
+import android.support.annotation.Nullable;
+
+import java.util.Map;
+
 /**
  * @author Parck.
  * @date 2017/10/10.
@@ -11,7 +15,7 @@ public interface Standardize {
     /**
      * 执行优先级1
      */
-    void setupData();
+    void setupData(@Nullable Map<String, Object> intentData);
 
     /**
      * 执行优先级2
