@@ -6,5 +6,5 @@ package cn.edots.nest.ui;
  * @desc
  */
 
-public abstract class BaseFragmentActivity extends BaseActivity {
+abstract class BaseFragmentActivity extends BaseActivity {
 }

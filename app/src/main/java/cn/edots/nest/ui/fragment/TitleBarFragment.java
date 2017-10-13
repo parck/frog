@@ -6,5 +6,5 @@ package cn.edots.nest.ui.fragment;
  * @desc
  */
 
-public abstract class TitleBarFragment extends BaseFragment {
+abstract class TitleBarFragment extends BaseFragment {
 }

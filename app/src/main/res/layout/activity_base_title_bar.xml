@@ -20,10 +20,21 @@
                 android:layout_marginRight="15dp">
 
                 <ImageView
-                    android:id="@+id/back_btn"
+                    android:id="@+id/left_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp" />
+
+                <TextView
+                    android:id="@+id/left_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:padding="5dp"
+                    android:textColor="@color/default_text_color"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/left_title_text"
@@ -31,9 +42,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@id/back_btn"
+                    android:layout_toRightOf="@id/left_button"
                     android:padding="5dp"
-                    android:text="TITLE"
                     android:textColor="@color/default_text_color"
                     android:textSize="16sp"
                     android:visibility="gone" />
@@ -72,6 +82,11 @@
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/shape_title_bar_bottom_line" />
 
     <FrameLayout
         android:id="@+id/content_layout"

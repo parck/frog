@@ -6,5 +6,5 @@ package cn.edots.nest.http;
  * @desc
  */
 
-public class HttpRequest {
+class HttpRequest {
 }

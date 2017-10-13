@@ -11,11 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.edots.nest.SlugResourceProvider;
 import cn.edots.nest.Standardize;
+import cn.edots.nest.event.MessageEvent;
 import cn.edots.nest.log.Logger;
 import cn.edots.slug.core.fragment.SlugBinder;
 
@@ -33,6 +38,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected Logger logger;
     protected final String INTENT_DATA = "INTENT_DATA";
     protected SlugBinder sbinder;
+    protected EventBus eventBus;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +57,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             throw new ClassCastException("This application has not implements \"SlugResourceProvider\"");
         }
         sbinder = SlugBinder.getInstance(THIS, container);
+        eventBus = EventBus.getDefault();
         logger.i("SlugBinder Init Successful!");
         if (THIS instanceof Standardize) {
             ((Standardize) THIS).setupData((Map<String, Object>) activity.getIntent().getSerializableExtra(INTENT_DATA));
@@ -59,6 +66,16 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             ((Standardize) THIS).onCreateLast();
         }
         return sbinder.getContentView();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        switch (event.getCMD()) {
+            case MessageEvent.CMD_FINISH_ACTIVITY:
+                if (event.getClazz().equals(this.getActivity().getClass()))
+                    this.getActivity().finish();
+                break;
+        }
     }
 
     @Override

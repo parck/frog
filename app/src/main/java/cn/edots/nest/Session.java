@@ -9,7 +9,7 @@ import java.util.Map;
  * @desc
  */
 
-public class Session {
+class Session {
 
     private static Map<String, Object> sessionCache = new HashMap<>();
 

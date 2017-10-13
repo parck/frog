@@ -1,6 +1,7 @@
 package cn.edots.nest.ui;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,11 +18,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.edots.nest.SlugResourceProvider;
 import cn.edots.nest.Standardize;
+import cn.edots.nest.event.MessageEvent;
 import cn.edots.nest.log.Logger;
 import cn.edots.slug.core.activity.SlugBinder;
 
@@ -42,6 +48,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected Logger logger;
     protected SlugBinder sbinder;
+    protected EventBus eventBus;
+    private ActivityManager activityManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,15 +73,39 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     private void init() {
         registerExitReceiver();
+        eventBus = EventBus.getDefault();
+        activityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
         sbinder = SlugBinder.getInstance(this);
-        logger.i("SlugBinder Init Successful!");
         if (THIS instanceof Standardize) {
             ((Standardize) THIS).setupData((Map<String, Object>) getIntent().getSerializableExtra(INTENT_DATA));
             ((Standardize) THIS).initView();
             ((Standardize) THIS).setListeners();
             ((Standardize) THIS).onCreateLast();
         }
+        logger.i("SlugBinder Init Successful!");
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        switch (event.getCMD()) {
+            case MessageEvent.CMD_FINISH_ACTIVITY:
+                if (event.getClazz().equals(this.getClass())) finish();
+                break;
+        }
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -92,10 +124,24 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         unregisterReceiver(exitReceiver);
     }
 
+    private long fistClick = -1;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case 4:
+                int activitySize = activityManager.getRunningTasks(1).size();
+                if (activitySize == 1) {
+                    if (fistClick < 0) {
+                        fistClick = System.currentTimeMillis();
+                        TOAST("再次点击退出应用");
+                    } else if ((System.currentTimeMillis() - fistClick) > 400) {
+                        finish();
+                    } else {
+                        fistClick = -1;
+                    }
+                    return super.onKeyDown(keyCode, event);
+                }
                 if (isBackToExit()) onExit();
                 else onBack();
                 break;

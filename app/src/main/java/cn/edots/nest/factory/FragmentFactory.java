@@ -6,5 +6,5 @@ package cn.edots.nest.factory;
  * @desc
  */
 
-public class FragmentFactory {
+class FragmentFactory {
 }
