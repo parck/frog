@@ -7,10 +7,12 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.edots.nest.R;
@@ -23,17 +25,18 @@ import cn.edots.nest.SlugResourceProvider;
  */
 public abstract class TitleBarActivity extends BaseActivity {
 
-    public static final int _18SP = R.dimen.text_size_18_sp;
-    public static final int _17SP = R.dimen.text_size_17_sp;
-    public static final int _16SP = R.dimen.text_size_16_sp;
-    public static final int _15SP = R.dimen.text_size_15_sp;
-    public static final int _14SP = R.dimen.text_size_14_sp;
-    public static final int _13SP = R.dimen.text_size_13_sp;
-    public static final int _12SP = R.dimen.text_size_12_sp;
-    public static final int _11SP = R.dimen.text_size_11_sp;
-    public static final int _10SP = R.dimen.text_size_10_sp;
+    public static final int _18SP = 18;
+    public static final int _17SP = 17;
+    public static final int _16SP = 16;
+    public static final int _15SP = 15;
+    public static final int _14SP = 14;
+    public static final int _13SP = 13;
+    public static final int _12SP = 12;
+    public static final int _11SP = 11;
+    public static final int _10SP = 10;
 
     protected Toolbar toolbar;
+    protected RelativeLayout titleLayout;
     protected ImageView leftButton;
     protected TextView leftText;
     protected TextView leftTitle;
@@ -54,6 +57,7 @@ public abstract class TitleBarActivity extends BaseActivity {
 
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        titleLayout = (RelativeLayout) findViewById(R.id.title_layout);
         leftButton = (ImageView) findViewById(R.id.left_button);
         leftText = (TextView) findViewById(R.id.left_button_text);
         leftTitle = (TextView) findViewById(R.id.left_title_text);
@@ -108,6 +112,18 @@ public abstract class TitleBarActivity extends BaseActivity {
     protected void setTitleBarColor(@ColorRes int resId) {
         toolbar.setBackgroundColor(THIS.getResources().getColor(resId));
     }
+    
+    protected void setTitleLayoutHeight(@DimenRes int resId) {
+        ViewGroup.LayoutParams layoutParams = titleLayout.getLayoutParams();
+        layoutParams.height = getResources().getDimensionPixelSize(resId);
+        titleLayout.setLayoutParams(layoutParams);
+    }
+
+    protected void setTitleLayoutPixelSizeHeight(int pixel) {
+        ViewGroup.LayoutParams layoutParams = titleLayout.getLayoutParams();
+        layoutParams.height = pixel;
+        titleLayout.setLayoutParams(layoutParams);
+    }
 
     protected void setBottomLineShapeResource(@DrawableRes int resId) {
         bottomLine.setBackgroundResource(resId);
@@ -133,15 +149,15 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setLeftTextContent(CharSequence text, @ColorRes int resId) {
-        setLeftTextContent(text, resId, _14SP);
+        setLeftTextContent(text, resId, _16SP);
     }
 
-    protected void setLeftTextContent(CharSequence text, @ColorRes int cresId, @DimenRes int dresId) {
+    protected void setLeftTextContent(CharSequence text, @ColorRes int resId, int spSize) {
         leftButton.setVisibility(View.GONE);
         leftTitle.setVisibility(View.VISIBLE);
         leftTitle.setText(text);
-        leftTitle.setTextSize(getResources().getDimensionPixelSize(dresId));
-        leftTitle.setTextColor(THIS.getResources().getColor(cresId));
+        leftTitle.setTextColor(THIS.getResources().getColor(resId));
+        leftTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, spSize);
     }
 
     protected void setOnLeftTextButtonClickListener(View.OnClickListener listener) {
@@ -155,14 +171,14 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setLeftTitleContent(CharSequence title, @ColorRes int resId) {
-        setLeftTitleContent(title, resId, _16SP);
+        setLeftTitleContent(title, resId, _18SP);
     }
 
-    protected void setLeftTitleContent(CharSequence title, @ColorRes int cresId, @DimenRes int dresId) {
+    protected void setLeftTitleContent(CharSequence title, @ColorRes int resId, int spSize) {
         leftTitle.setVisibility(View.VISIBLE);
         leftTitle.setText(title);
-        leftTitle.setTextSize(getResources().getDimensionPixelSize(dresId));
-        leftTitle.setTextColor(THIS.getResources().getColor(cresId));
+        leftTitle.setTextColor(THIS.getResources().getColor(resId));
+        leftTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, spSize);
     }
     /*设置左边title*/
 
@@ -172,14 +188,14 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setCenterTitleContent(CharSequence title, @ColorRes int resId) {
-        setCenterTitleContent(title, resId, _16SP);
+        setCenterTitleContent(title, resId, _18SP);
     }
 
-    protected void setCenterTitleContent(CharSequence title, @ColorRes int cresId, @DimenRes int dresId) {
+    protected void setCenterTitleContent(CharSequence title, @ColorRes int resId, int spSize) {
         centerTitle.setVisibility(View.VISIBLE);
         centerTitle.setText(title);
-        centerTitle.setTextColor(THIS.getResources().getColor(cresId));
-        centerTitle.setTextSize(THIS.getResources().getDimensionPixelSize(dresId));
+        centerTitle.setTextColor(THIS.getResources().getColor(resId));
+        centerTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, spSize);
     }
     /*设置中间title*/
 
@@ -201,15 +217,15 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setRightTextContent(CharSequence text, @ColorRes int resId) {
-        setRightTextContent(text, R.color.default_text_color, _14SP);
+        setRightTextContent(text, R.color.default_text_color, _16SP);
     }
 
-    protected void setRightTextContent(CharSequence text, @ColorRes int cresId, @DimenRes int dresId) {
+    protected void setRightTextContent(CharSequence text, @ColorRes int resId, int spSize) {
         rightButton.setVisibility(View.GONE);
         rightText.setVisibility(View.VISIBLE);
         rightText.setText(text);
-        rightText.setTextColor(THIS.getResources().getColor(cresId));
-        rightText.setTextSize(THIS.getResources().getDimensionPixelSize(dresId));
+        rightText.setTextColor(THIS.getResources().getColor(resId));
+        rightText.setTextSize(TypedValue.COMPLEX_UNIT_SP, spSize);
     }
 
     protected void setOnRightTextListener(View.OnClickListener listener) {
