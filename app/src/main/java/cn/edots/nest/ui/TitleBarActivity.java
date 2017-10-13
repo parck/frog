@@ -40,6 +40,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     protected TextView centerTitle;
     protected ImageView rightButton;
     protected TextView rightText;
+    protected View bottomLine;
     protected FrameLayout contentLayout;
 
     @Override
@@ -59,10 +60,15 @@ public abstract class TitleBarActivity extends BaseActivity {
         centerTitle = (TextView) findViewById(R.id.center_title_text_view);
         rightButton = (ImageView) findViewById(R.id.right_image_btn);
         rightText = (TextView) findViewById(R.id.right_text_btn);
+        bottomLine = findViewById(R.id.bottom_line);
         contentLayout = (FrameLayout) findViewById(R.id.content_layout);
 
         if (isHideBackButton()) {
             leftButton.setVisibility(View.GONE);
+        }
+
+        if (isHideBottomLine()) {
+            bottomLine.setVisibility(View.GONE);
         }
 
         try {
@@ -103,6 +109,10 @@ public abstract class TitleBarActivity extends BaseActivity {
         toolbar.setBackgroundColor(THIS.getResources().getColor(resId));
     }
 
+    protected void setBottomLineShapeResource(@DrawableRes int resId) {
+        bottomLine.setBackgroundResource(resId);
+    }
+
     //===============================================================
     // 重载方法
     //===============================================================
@@ -130,7 +140,7 @@ public abstract class TitleBarActivity extends BaseActivity {
         leftButton.setVisibility(View.GONE);
         leftTitle.setVisibility(View.VISIBLE);
         leftTitle.setText(text);
-        leftTitle.setTextSize(getResources().getDimension(dresId));
+        leftTitle.setTextSize(getResources().getDimensionPixelSize(dresId));
         leftTitle.setTextColor(THIS.getResources().getColor(cresId));
     }
 
@@ -151,7 +161,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     protected void setLeftTitleContent(CharSequence title, @ColorRes int cresId, @DimenRes int dresId) {
         leftTitle.setVisibility(View.VISIBLE);
         leftTitle.setText(title);
-        leftTitle.setTextSize(getResources().getDimension(dresId));
+        leftTitle.setTextSize(getResources().getDimensionPixelSize(dresId));
         leftTitle.setTextColor(THIS.getResources().getColor(cresId));
     }
     /*设置左边title*/
@@ -169,7 +179,7 @@ public abstract class TitleBarActivity extends BaseActivity {
         centerTitle.setVisibility(View.VISIBLE);
         centerTitle.setText(title);
         centerTitle.setTextColor(THIS.getResources().getColor(cresId));
-        centerTitle.setTextSize(THIS.getResources().getDimension(dresId));
+        centerTitle.setTextSize(THIS.getResources().getDimensionPixelSize(dresId));
     }
     /*设置中间title*/
 
@@ -199,7 +209,7 @@ public abstract class TitleBarActivity extends BaseActivity {
         rightText.setVisibility(View.VISIBLE);
         rightText.setText(text);
         rightText.setTextColor(THIS.getResources().getColor(cresId));
-        rightText.setTextSize(THIS.getResources().getDimension(dresId));
+        rightText.setTextSize(THIS.getResources().getDimensionPixelSize(dresId));
     }
 
     protected void setOnRightTextListener(View.OnClickListener listener) {
@@ -208,6 +218,10 @@ public abstract class TitleBarActivity extends BaseActivity {
     /*设置右边text*/
 
     protected boolean isHideBackButton() {
+        return false;
+    }
+
+    protected boolean isHideBottomLine() {
         return false;
     }
 }
