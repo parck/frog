@@ -25,6 +25,12 @@ import cn.edots.nest.SlugResourceProvider;
  */
 public abstract class TitleBarActivity extends BaseActivity {
 
+    public static final int _24SP = 24;
+    public static final int _23SP = 23;
+    public static final int _22SP = 22;
+    public static final int _21SP = 21;
+    public static final int _20SP = 20;
+    public static final int _19SP = 19;
     public static final int _18SP = 18;
     public static final int _17SP = 17;
     public static final int _16SP = 16;
@@ -91,6 +97,14 @@ public abstract class TitleBarActivity extends BaseActivity {
                 else onBack();
             }
         });
+
+        setOnLeftTextButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isBackToExit()) onExit();
+                else onBack();
+            }
+        });
     }
 
     @Override
@@ -112,7 +126,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     protected void setTitleBarColor(@ColorRes int resId) {
         toolbar.setBackgroundColor(THIS.getResources().getColor(resId));
     }
-    
+
     protected void setTitleLayoutHeight(@DimenRes int resId) {
         ViewGroup.LayoutParams layoutParams = titleLayout.getLayoutParams();
         layoutParams.height = getResources().getDimensionPixelSize(resId);
@@ -154,10 +168,10 @@ public abstract class TitleBarActivity extends BaseActivity {
 
     protected void setLeftTextContent(CharSequence text, @ColorRes int resId, int spSize) {
         leftButton.setVisibility(View.GONE);
-        leftTitle.setVisibility(View.VISIBLE);
-        leftTitle.setText(text);
-        leftTitle.setTextColor(THIS.getResources().getColor(resId));
-        leftTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, spSize);
+        leftText.setVisibility(View.VISIBLE);
+        leftText.setText(text);
+        leftText.setTextColor(THIS.getResources().getColor(resId));
+        leftText.setTextSize(TypedValue.COMPLEX_UNIT_SP, spSize);
     }
 
     protected void setOnLeftTextButtonClickListener(View.OnClickListener listener) {
@@ -171,7 +185,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setLeftTitleContent(CharSequence title, @ColorRes int resId) {
-        setLeftTitleContent(title, resId, _18SP);
+        setLeftTitleContent(title, resId, _20SP);
     }
 
     protected void setLeftTitleContent(CharSequence title, @ColorRes int resId, int spSize) {
@@ -188,7 +202,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setCenterTitleContent(CharSequence title, @ColorRes int resId) {
-        setCenterTitleContent(title, resId, _18SP);
+        setCenterTitleContent(title, resId, _20SP);
     }
 
     protected void setCenterTitleContent(CharSequence title, @ColorRes int resId, int spSize) {
