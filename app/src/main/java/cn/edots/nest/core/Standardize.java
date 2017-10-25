@@ -1,4 +1,4 @@
-package cn.edots.nest;
+package cn.edots.nest.core;
 
 import android.support.annotation.Nullable;
 

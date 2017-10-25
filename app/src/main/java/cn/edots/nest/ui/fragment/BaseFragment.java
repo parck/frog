@@ -3,6 +3,7 @@ package cn.edots.nest.ui.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.v4.app.Fragment;
@@ -12,15 +13,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edots.nest.SlugResourceProvider;
-import cn.edots.nest.Standardize;
-import cn.edots.nest.event.MessageEvent;
+import cn.edots.nest.core.SlugResourceProvider;
+import cn.edots.nest.core.Standardize;
 import cn.edots.nest.log.Logger;
 import cn.edots.slug.core.fragment.SlugBinder;
 
@@ -33,10 +31,12 @@ import cn.edots.slug.core.fragment.SlugBinder;
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
 
     protected final String TAG = this.getClass().getSimpleName();
+    protected static final String EXIT_ACTION = "EXIT_ACTION";
+    protected static final String INTENT_DATA = "INTENT_DATA";
+
     protected Fragment THIS;
     protected Activity activity;
     protected Logger logger;
-    protected final String INTENT_DATA = "INTENT_DATA";
     protected SlugBinder sbinder;
     protected EventBus eventBus;
 
@@ -54,28 +54,27 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             SlugResourceProvider resourceProvider = (SlugResourceProvider) activity.getApplication();
             logger = new Logger(TAG, resourceProvider.isDebug());
         } catch (ClassCastException e) {
-            throw new ClassCastException("This application has not implements \"SlugResourceProvider\"");
+            throw new ClassCastException("This application has not to implements \"SlugResourceProvider\"");
         }
         sbinder = SlugBinder.getInstance(THIS, container);
         eventBus = EventBus.getDefault();
         logger.i("SlugBinder Init Successful!");
+        return sbinder.getContentView();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (THIS instanceof Standardize) {
             ((Standardize) THIS).setupData((Map<String, Object>) activity.getIntent().getSerializableExtra(INTENT_DATA));
             ((Standardize) THIS).initView();
             ((Standardize) THIS).setListeners();
             ((Standardize) THIS).onCreateLast();
         }
-        return sbinder.getContentView();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
-        switch (event.getCMD()) {
-            case MessageEvent.CMD_FINISH_ACTIVITY:
-                if (event.getClazz().equals(this.getActivity().getClass()))
-                    this.getActivity().finish();
-                break;
-        }
+    public <V extends View> V findViewById(@IdRes int id) {
+        return (V) sbinder.getContentView().findViewById(id);
     }
 
     @Override
@@ -106,4 +105,17 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         THIS.startActivity(intent);
     }
 
+    protected boolean isBackToExit() {
+        return false;
+    }
+
+    protected void onBack() {
+        this.getActivity().finish();
+    }
+
+    protected void onExit() {
+        Intent exitIntent = new Intent();
+        exitIntent.setAction(EXIT_ACTION);
+        THIS.getActivity().sendBroadcast(exitIntent);
+    }
 }

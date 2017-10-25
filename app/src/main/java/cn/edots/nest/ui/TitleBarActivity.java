@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.edots.nest.R;
-import cn.edots.nest.SlugResourceProvider;
+import cn.edots.nest.core.SlugResourceProvider;
 
 /**
  * @author Parck.
@@ -185,7 +185,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setLeftTitleContent(CharSequence title, @ColorRes int resId) {
-        setLeftTitleContent(title, resId, _20SP);
+        setLeftTitleContent(title, resId, _18SP);
     }
 
     protected void setLeftTitleContent(CharSequence title, @ColorRes int resId, int spSize) {
@@ -202,7 +202,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setCenterTitleContent(CharSequence title, @ColorRes int resId) {
-        setCenterTitleContent(title, resId, _20SP);
+        setCenterTitleContent(title, resId, _18SP);
     }
 
     protected void setCenterTitleContent(CharSequence title, @ColorRes int resId, int spSize) {
