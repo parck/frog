@@ -36,9 +36,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     protected Fragment THIS;
     protected Activity activity;
-    protected Logger logger;
+    protected View rootView;
     protected SlugBinder sbinder;
     protected EventBus eventBus;
+    protected Logger logger;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +60,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         sbinder = SlugBinder.getInstance(THIS, container);
         eventBus = EventBus.getDefault();
         logger.i("SlugBinder Init Successful!");
-        return sbinder.getContentView();
+        rootView = sbinder.getContentView();
+        return rootView;
     }
 
     @Override
@@ -80,7 +82,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        sbinder.finish();
+        if (sbinder != null) sbinder.finish();
     }
 
     @Override

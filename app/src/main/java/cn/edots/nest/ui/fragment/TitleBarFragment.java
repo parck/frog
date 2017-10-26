@@ -41,8 +41,7 @@ public abstract class TitleBarFragment extends BaseFragment {
     public static final int _11SP = 11;
     public static final int _10SP = 10;
 
-    private View rootView;
-
+    protected View rootView;
     protected RelativeLayout titleLayout;
     protected ImageView leftButton;
     protected TextView leftText;
@@ -56,7 +55,7 @@ public abstract class TitleBarFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_base_title_bar, container, false);
+        this.rootView = inflater.inflate(R.layout.fragment_base_title_bar, container, false);
         FrameLayout contentContainer = (FrameLayout) rootView.findViewById(R.id.content_layout);
         contentContainer.removeAllViews();
         contentContainer.addView(super.onCreateView(inflater, contentContainer, savedInstanceState), contentContainer.getLayoutParams());

@@ -91,7 +91,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected void onDestroy() {
         super.onDestroy();
         unregisterExitReceiver();
-        sbinder.finish();
+        if (sbinder != null) sbinder.finish();
     }
 
     private void registerExitReceiver() {
