@@ -29,11 +29,13 @@
 
                 <ImageView
                     android:id="@+id/left_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:padding="12dp"
+                    android:src="@drawable/default_back_icon"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/left_button_text"
@@ -75,12 +77,13 @@
 
                 <ImageView
                     android:id="@+id/right_image_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
                     android:clickable="true"
+                    android:padding="12dp"
+                    android:src="@drawable/default_more_icon"
                     android:visibility="gone" />
 
                 <TextView

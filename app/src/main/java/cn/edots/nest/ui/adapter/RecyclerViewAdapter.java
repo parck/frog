@@ -63,6 +63,10 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         return data.size();
     }
 
+    public Context getContext() {
+        return this.context;
+    }
+
     protected abstract void binding(ViewHolder holder, T data, int position);
 
     //=======================================================================
@@ -71,9 +75,11 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private SparseArray<View> viewContainer;
+        private Context context;
 
         public ViewHolder(Context context, @LayoutRes int layoutId, ViewGroup parent) {
             super(LayoutInflater.from(context).inflate(layoutId, parent, false));
+            this.context = context;
             this.viewContainer = new SparseArray<>();
         }
 
@@ -92,6 +98,10 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
         public void setOnItemClickListener(View.OnClickListener listener) {
             if (listener != null) this.itemView.setOnClickListener(listener);
+        }
+
+        public Context getContext() {
+            return this.context;
         }
     }
 }
