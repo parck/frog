@@ -1,8 +1,8 @@
 package cn.edots.nest.core.cache;
 
-import java.util.HashMap;
+import android.support.v4.app.Fragment;
 
-import cn.edots.nest.ui.fragment.BaseFragment;
+import java.util.HashMap;
 
 /**
  * @author Parck.
@@ -24,7 +24,7 @@ public class AppCachePool<K, V> extends HashMap<K, V> {
     private AppCachePool() {
     }
 
-    public void cache(String key, BaseFragment fragment) {
+    public void cache(String key, Fragment fragment) {
         pool.put(key, fragment);
     }
 

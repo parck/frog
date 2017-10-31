@@ -51,6 +51,7 @@ public abstract class TitleBarFragment extends BaseFragment {
     protected TextView rightText;
     protected View bottomLine;
     protected FrameLayout contentLayout;
+    private View emptyView;
 
     @Nullable
     @Override
@@ -65,6 +66,8 @@ public abstract class TitleBarFragment extends BaseFragment {
     }
 
     private void initView() {
+        emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_empty, contentLayout, false);
+
         titleLayout = (RelativeLayout) rootView.findViewById(R.id.title_layout);
         leftButton = (ImageView) rootView.findViewById(R.id.left_button);
         leftText = (TextView) rootView.findViewById(R.id.left_button_text);
@@ -127,6 +130,14 @@ public abstract class TitleBarFragment extends BaseFragment {
 
     protected void setBottomLineShapeResource(@DrawableRes int resId) {
         bottomLine.setBackgroundResource(resId);
+    }
+
+    protected void showEmpty() {
+        contentLayout.addView(emptyView);
+    }
+
+    protected void hideEmpty() {
+        contentLayout.removeView(emptyView);
     }
 
     //===============================================================

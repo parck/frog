@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import cn.edots.nest.R;
 import cn.edots.nest.core.SlugResourceProvider;
+import cn.edots.nest.core.cache.FragmentPool;
+import cn.edots.nest.ui.fragment.EmptyFragment;
 
 /**
  * @author Parck.
@@ -141,6 +143,14 @@ public abstract class TitleBarActivity extends BaseActivity {
 
     protected void setBottomLineShapeResource(@DrawableRes int resId) {
         bottomLine.setBackgroundResource(resId);
+    }
+
+    protected void showEmpty() {
+        addFragment(R.id.content_layout, FragmentPool.getFragment(EmptyFragment.class));
+    }
+
+    protected void hideEmpty() {
+        removeFragment(FragmentPool.getFragment(EmptyFragment.class));
     }
 
     //===============================================================

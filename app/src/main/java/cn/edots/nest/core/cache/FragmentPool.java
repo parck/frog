@@ -1,5 +1,7 @@
 package cn.edots.nest.core.cache;
 
+import android.support.v4.app.Fragment;
+
 import cn.edots.nest.ui.fragment.BaseFragment;
 
 /**
@@ -12,7 +14,7 @@ public class FragmentPool {
 
     private static AppCachePool<String, BaseFragment> cache = AppCachePool.getInstance();
 
-    public static <T extends BaseFragment> T getFragment(Class<T> clazz) {
+    public static <T extends Fragment> T getFragment(Class<T> clazz) {
         if (cache.get(clazz.getSimpleName()) == null) {
             try {
                 cache.cache(clazz.getSimpleName(), clazz.newInstance());
