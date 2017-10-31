@@ -52,6 +52,8 @@ public abstract class TitleBarFragment extends BaseFragment {
     protected View bottomLine;
     protected FrameLayout contentLayout;
     private View emptyView;
+    private ImageView emptyImage;
+    private TextView emptyText;
 
     @Nullable
     @Override
@@ -67,6 +69,8 @@ public abstract class TitleBarFragment extends BaseFragment {
 
     private void initView() {
         emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_empty, contentLayout, false);
+        emptyImage = (ImageView) emptyView.findViewById(R.id.empty_image);
+        emptyText = (TextView) emptyView.findViewById(R.id.empty_text);
 
         titleLayout = (RelativeLayout) rootView.findViewById(R.id.title_layout);
         leftButton = (ImageView) rootView.findViewById(R.id.left_button);
@@ -133,6 +137,24 @@ public abstract class TitleBarFragment extends BaseFragment {
     }
 
     protected void showEmpty() {
+        showEmpty(0);
+    }
+
+    protected void showEmpty(@DrawableRes int resId) {
+        showEmpty(resId, null);
+    }
+
+    protected void showEmpty(@DrawableRes int resId, CharSequence text) {
+        showEmpty(resId, text, null);
+    }
+
+    protected void showEmpty(@DrawableRes int resId, CharSequence text, View.OnClickListener listener) {
+        if (resId != 0) emptyImage.setImageResource(resId);
+        if (text != null) emptyText.setText(text);
+        if (listener != null) {
+            emptyImage.setOnClickListener(listener);
+            emptyText.setOnClickListener(listener);
+        }
         contentLayout.addView(emptyView);
     }
 

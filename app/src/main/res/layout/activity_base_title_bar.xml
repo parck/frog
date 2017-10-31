@@ -81,7 +81,7 @@
                     android:layout_height="46dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="3dp"
+                    android:layout_marginRight="4dp"
                     android:clickable="true"
                     android:padding="12dp"
                     android:src="@drawable/default_more_icon"

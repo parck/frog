@@ -6,6 +6,7 @@ import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
@@ -17,7 +18,7 @@ import android.widget.TextView;
 
 import cn.edots.nest.R;
 import cn.edots.nest.core.SlugResourceProvider;
-import cn.edots.nest.core.cache.FragmentPool;
+import cn.edots.nest.core.cache.Session;
 import cn.edots.nest.ui.fragment.EmptyFragment;
 
 /**
@@ -146,11 +147,28 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void showEmpty() {
-        addFragment(R.id.content_layout, FragmentPool.getFragment(EmptyFragment.class));
+        showEmpty(0);
+    }
+
+    protected void showEmpty(@DrawableRes int resId) {
+        showEmpty(resId, null);
+    }
+
+    protected void showEmpty(@DrawableRes int resId, CharSequence text) {
+        showEmpty(resId, text, null);
+    }
+
+    protected void showEmpty(@DrawableRes int resId, CharSequence text, View.OnClickListener listener) {
+        EmptyFragment emptyFragment = new EmptyFragment();
+        emptyFragment.setResId(resId);
+        emptyFragment.setText(text);
+        emptyFragment.setOnClickListener(listener);
+        Session.setAttribute(EmptyFragment.class.getClass().getSimpleName(), emptyFragment);
+        addFragment(R.id.content_layout, (Fragment) Session.getAttribute(EmptyFragment.class.getClass().getSimpleName()));
     }
 
     protected void hideEmpty() {
-        removeFragment(FragmentPool.getFragment(EmptyFragment.class));
+        removeFragment((Fragment) Session.getAttribute(EmptyFragment.class.getClass().getSimpleName()));
     }
 
     //===============================================================
