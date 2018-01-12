@@ -2,7 +2,10 @@ package cn.edots.nest.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -12,15 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edots.nest.core.SlugResourceProvider;
-import cn.edots.nest.core.Standardize;
+import cn.edots.nest.BuildConfig;
+import cn.edots.nest.R;
+import cn.edots.nest.Standardize;
 import cn.edots.nest.log.Logger;
+import cn.edots.nest.ui.BaseActivity;
 import cn.edots.slug.core.fragment.SlugBinder;
+
+import static cn.edots.nest.ui.BaseActivity.EXIT_ACTION;
+import static cn.edots.nest.ui.BaseActivity.FINISH_PARAMETER_INTENT_DATA;
+import static cn.edots.nest.ui.BaseActivity.INTENT_DATA;
 
 /**
  * @author Parck.
@@ -31,36 +39,45 @@ import cn.edots.slug.core.fragment.SlugBinder;
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
 
     protected final String TAG = this.getClass().getSimpleName();
-    protected static final String EXIT_ACTION = "EXIT_ACTION";
-    protected static final String INTENT_DATA = "INTENT_DATA";
+    protected static final String DEFAULT_BACK_ICON = "BACK_ICON";
+    protected static final String DEFAULT_DEBUG_MODE = "DEBUG_MODE";
 
+    protected long CURRENT_TIME_MILLIS;
     protected Fragment THIS;
     protected Activity activity;
     protected View rootView;
-    protected SlugBinder sbinder;
-    protected EventBus eventBus;
+    protected SlugBinder sb;
     protected Logger logger;
+    protected
+    @DrawableRes
+    int defaultBackIconRes = R.drawable.default_back_icon;
+    protected boolean defaultDebugMode = BuildConfig.DEBUG;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         THIS = this;
         activity = THIS.getActivity();
+        try {
+            ApplicationInfo appInfo = getActivity().getPackageManager().getApplicationInfo(getActivity().getPackageName(), PackageManager.GET_META_DATA);
+            Bundle metaData = appInfo.metaData;
+            if (metaData != null) {
+                defaultBackIconRes = metaData.getInt(DEFAULT_BACK_ICON);
+                defaultDebugMode = metaData.getBoolean(DEFAULT_DEBUG_MODE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger = Logger.getInstance(TAG, defaultDebugMode);
+        CURRENT_TIME_MILLIS = System.currentTimeMillis();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        try {
-            SlugResourceProvider resourceProvider = (SlugResourceProvider) activity.getApplication();
-            logger = new Logger(TAG, resourceProvider.isDebug());
-        } catch (ClassCastException e) {
-            throw new ClassCastException("This application has not to implements \"SlugResourceProvider\"");
-        }
-        sbinder = SlugBinder.getInstance(THIS, container);
-        eventBus = EventBus.getDefault();
-        logger.i("SlugBinder Init Successful!");
-        rootView = sbinder.getContentView();
+        sb = SlugBinder.getInstance(THIS, container);
+        rootView = sb.getContentView();
+        logger.i("\"鼻涕虫\" 初始化消耗 " + (System.currentTimeMillis() - CURRENT_TIME_MILLIS) + "ms");
         return rootView;
     }
 
@@ -76,13 +93,13 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     public <V extends View> V findViewById(@IdRes int id) {
-        return (V) sbinder.getContentView().findViewById(id);
+        return (V) sb.getContentView().findViewById(id);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (sbinder != null) sbinder.finish();
+        if (sb != null) sb.finish();
     }
 
     @Override
@@ -107,7 +124,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         THIS.startActivity(intent);
     }
 
-    protected boolean isBackToExit() {
+    protected boolean isBackAndExit() {
         return false;
     }
 
@@ -116,8 +133,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     protected void onExit() {
-        Intent exitIntent = new Intent();
-        exitIntent.setAction(EXIT_ACTION);
-        THIS.getActivity().sendBroadcast(exitIntent);
+        Intent finishIntent = new Intent();
+        finishIntent.setAction(EXIT_ACTION);
+        finishIntent.putExtra(FINISH_PARAMETER_INTENT_DATA, new BaseActivity.FinishParameter());
+        THIS.getActivity().sendBroadcast(finishIntent);
     }
 }

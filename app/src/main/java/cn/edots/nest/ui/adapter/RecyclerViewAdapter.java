@@ -20,16 +20,16 @@ import java.util.List;
 
 public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private
+    protected
     @LayoutRes
     int layoutId;
-    private
+    protected
     @LayoutRes
     int[] layoutIds;
-    private Context context;
-    private List<T> data;
+    protected Context context;
+    protected List<T> data;
 
-    private ViewHolder holder;
+    protected ViewHolder holder;
 
     public RecyclerViewAdapter(Context context, @LayoutRes int layoutId, List<T> data) {
         this.context = context;
@@ -47,6 +47,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (layoutId != 0) {
             holder = new ViewHolder(context, layoutId, parent);
+            holder.setAdapter(this);
         } else {
             holder = new ViewHolder(context, layoutIds[viewType], parent);
         }
@@ -56,6 +57,10 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         binding(holder, data.get(position), position);
+        if (position + 1 == data.size()) onLastItemVisible(getItemViewType(position));
+    }
+
+    protected void onLastItemVisible(int type) {
     }
 
     @Override
@@ -76,6 +81,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private SparseArray<View> viewContainer;
         private Context context;
+        private RecyclerViewAdapter adapter;
 
         public ViewHolder(Context context, @LayoutRes int layoutId, ViewGroup parent) {
             super(LayoutInflater.from(context).inflate(layoutId, parent, false));
@@ -102,6 +108,14 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
         public Context getContext() {
             return this.context;
+        }
+
+        public void setAdapter(RecyclerViewAdapter adapter) {
+            this.adapter = adapter;
+        }
+
+        public RecyclerViewAdapter getAdapter() {
+            return adapter;
         }
     }
 }

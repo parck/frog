@@ -20,14 +20,14 @@ import cn.edots.nest.R;
 
 public class EmptyFragment extends Fragment {
 
-    private ImageView emptyImage;
-    private TextView emptyText;
+    protected ImageView emptyImage;
+    protected TextView emptyText;
 
     private
     @DrawableRes
     int resId;
-    private CharSequence text;
-    private View.OnClickListener onClickListener;
+    protected CharSequence text;
+    protected View.OnClickListener onClickListener;
 
     @Nullable
     @Override

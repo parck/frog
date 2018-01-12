@@ -9,12 +9,22 @@ import android.util.Log;
  */
 public class Logger {
 
-    private String tag;
-    private boolean debug = true;
+    protected String tag;
+    protected boolean debug;
+    protected static Logger logger;
 
-    public Logger(String tag, boolean debug) {
-        this.tag = tag;
-        this.debug = debug;
+    public static Logger getInstance(String tag, boolean debug) {
+        if (logger == null) logger = new Logger();
+        logger.tag = tag;
+        logger.debug = debug;
+        return logger;
+    }
+
+    public static void l(Object s) {
+        if (logger == null) logger = new Logger();
+        logger.tag = "TAG ~";
+        logger.debug = true;
+        logger.e(s);
     }
 
     public void i(Object s) {
