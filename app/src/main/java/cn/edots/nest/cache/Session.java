@@ -65,7 +65,7 @@ public class Session {
     Serializable read(String key) {
         FileInputStream fileIn = null;
         ObjectInputStream in = null;
-        Serializable o = null;
+        Serializable o;
         try {
             fileIn = new FileInputStream(getPath(key));
             in = new ObjectInputStream(fileIn);
@@ -91,7 +91,6 @@ public class Session {
         return o;
     }
 
-    @NonNull
     private static String getPath(String key) {
         return path.append(key).append(suffix).toString();
     }
