@@ -1,6 +1,4 @@
-package cn.edots.nest.core;
-
-import java.io.Serializable;
+package cn.edots.nest;
 
 /**
  * @author Parck.
@@ -8,7 +6,7 @@ import java.io.Serializable;
  * @desc
  */
 
-public interface Gradable extends Serializable {
+public interface Classable extends Holdable {
 
     void setType(int type);
 

@@ -1,4 +1,4 @@
-package cn.edots.nest.core.cache;
+package cn.edots.nest.cache;
 
 import android.support.v4.app.Fragment;
 
@@ -12,12 +12,12 @@ import cn.edots.nest.ui.fragment.BaseFragment;
 
 public class FragmentPool {
 
-    private static AppCachePool<String, BaseFragment> cache = AppCachePool.getInstance();
+    protected static AppCachePool<String, BaseFragment> cache = AppCachePool.getInstance().newTAG(FragmentPool.class.getSimpleName());
 
     public static <T extends Fragment> T getFragment(Class<T> clazz) {
         if (cache.get(clazz.getSimpleName()) == null) {
             try {
-                cache.cache(clazz.getSimpleName(), clazz.newInstance());
+                cache.put(clazz.getSimpleName(), (BaseFragment) clazz.newInstance());
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -29,6 +29,10 @@ public class FragmentPool {
 
     public static void remove(String key) {
         cache.remove(key);
+    }
+
+    public static void clear() {
+        cache.clear();
     }
 
 }

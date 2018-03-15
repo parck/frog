@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.edots.nest.R;
-import cn.edots.nest.core.SlugResourceProvider;
 
 /**
  * @author Parck.
@@ -51,9 +50,9 @@ public abstract class TitleBarFragment extends BaseFragment {
     protected TextView rightText;
     protected View bottomLine;
     protected FrameLayout contentLayout;
-    private View emptyView;
-    private ImageView emptyImage;
-    private TextView emptyText;
+    protected View emptyView;
+    protected ImageView emptyImage;
+    protected TextView emptyText;
 
     @Nullable
     @Override
@@ -89,20 +88,14 @@ public abstract class TitleBarFragment extends BaseFragment {
         if (isHideBottomLine()) {
             bottomLine.setVisibility(View.GONE);
         }
-
-        try {
-            SlugResourceProvider resourceProvider = (SlugResourceProvider) this.getActivity().getApplication();
-            setLeftButtonImageResource(resourceProvider.getBackButtonImageResource());
-        } catch (ClassCastException e) {
-            throw new ClassCastException("This application has not implements \"SlugResourceProvider\"");
-        }
+        setLeftButtonImageResource(defaultBackIconRes);
     }
 
     private void initListener() {
         setOnLeftButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isBackToExit()) onExit();
+                if (isBackAndExit()) onExit();
                 else onBack();
             }
         });
@@ -110,7 +103,7 @@ public abstract class TitleBarFragment extends BaseFragment {
         setOnLeftTextButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isBackToExit()) onExit();
+                if (isBackAndExit()) onExit();
                 else onBack();
             }
         });

@@ -9,7 +9,7 @@
         android:id="@+id/tool_bar"
         style="@style/TitleBarTheme"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
         android:background="@color/default_title_bar_color"
         android:contentInsetLeft="0dp"
         android:contentInsetRight="0dp"

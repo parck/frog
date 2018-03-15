@@ -1,5 +1,7 @@
 package cn.edots.nest.ui;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
@@ -17,8 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.edots.nest.R;
-import cn.edots.nest.core.SlugResourceProvider;
-import cn.edots.nest.core.cache.Session;
+import cn.edots.nest.cache.Session;
 import cn.edots.nest.ui.fragment.EmptyFragment;
 
 /**
@@ -54,14 +55,30 @@ public abstract class TitleBarActivity extends BaseActivity {
     protected TextView rightText;
     protected View bottomLine;
     protected FrameLayout contentLayout;
+    protected
+    @DrawableRes
+    int defaultBackIconRes = R.drawable.default_back_icon;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.setContentView(R.layout.activity_base_title_bar);
+        initData();
         initView();
         initListener();
         setSupportActionBar(toolbar);
         super.onCreate(savedInstanceState);
+    }
+
+    private void initData() {
+        try {
+            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            Bundle metaData = appInfo.metaData;
+            if (metaData != null) {
+                defaultBackIconRes = metaData.getInt(DEFAULT_BACK_ICON);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initView() {
@@ -83,20 +100,14 @@ public abstract class TitleBarActivity extends BaseActivity {
         if (isHideBottomLine()) {
             bottomLine.setVisibility(View.GONE);
         }
-
-        try {
-            SlugResourceProvider resourceProvider = (SlugResourceProvider) this.getApplication();
-            setLeftButtonImageResource(resourceProvider.getBackButtonImageResource());
-        } catch (ClassCastException e) {
-            throw new ClassCastException("This application has not implements \"SlugResourceProvider\"");
-        }
+        setLeftButtonImageResource(defaultBackIconRes);
     }
 
     private void initListener() {
         setOnLeftButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isBackToExit()) onExit();
+                if (isBackAndExit()) onExit();
                 else onBack();
             }
         });
@@ -104,7 +115,7 @@ public abstract class TitleBarActivity extends BaseActivity {
         setOnLeftTextButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isBackToExit()) onExit();
+                if (isBackAndExit()) onExit();
                 else onBack();
             }
         });
@@ -259,7 +270,7 @@ public abstract class TitleBarActivity extends BaseActivity {
     }
 
     protected void setRightTextContent(CharSequence text, @ColorRes int resId) {
-        setRightTextContent(text, R.color.default_text_color, _16SP);
+        setRightTextContent(text, resId, _16SP);
     }
 
     protected void setRightTextContent(CharSequence text, @ColorRes int resId, int spSize) {
