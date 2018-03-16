@@ -13,7 +13,7 @@ public class ControllerProvider {
 
     protected static AppCachePool<String, Controller> cache = AppCachePool.getInstance().newTAG(ControllerProvider.class.getSimpleName());
 
-    public static <T extends Controller> T get(Class<T> clazz) throws ReflectiveOperationException {
+    public static <T extends Controller> T get(Class<T> clazz) throws IllegalAccessException, InstantiationException {
         T t = (T) cache.get(clazz.getSimpleName());
         if (t == null) {
             t = clazz.newInstance();

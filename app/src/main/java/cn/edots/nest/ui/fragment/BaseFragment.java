@@ -20,15 +20,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.edots.nest.BuildConfig;
+import cn.edots.nest.Controller;
 import cn.edots.nest.R;
 import cn.edots.nest.Standardize;
+import cn.edots.nest.factory.ControllerProvider;
 import cn.edots.nest.log.Logger;
+import cn.edots.nest.model.protocol.Protocol;
+import cn.edots.nest.model.view.ViewModel;
 import cn.edots.nest.ui.BaseActivity;
 import cn.edots.slug.core.fragment.SlugBinder;
 
 import static cn.edots.nest.ui.BaseActivity.EXIT_ACTION;
 import static cn.edots.nest.ui.BaseActivity.FINISH_PARAMETER_INTENT_DATA;
 import static cn.edots.nest.ui.BaseActivity.INTENT_DATA;
+import static cn.edots.nest.ui.BaseActivity.VIEW_PROTOCOL;
 
 /**
  * @author Parck.
@@ -42,6 +47,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected static final String DEFAULT_BACK_ICON = "BACK_ICON";
     protected static final String DEFAULT_DEBUG_MODE = "DEBUG_MODE";
 
+    private Protocol protocol;
+    private Controller controller;
+
     protected long CURRENT_TIME_MILLIS;
     protected Fragment THIS;
     protected Activity activity;
@@ -52,6 +60,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @DrawableRes
     int defaultBackIconRes = R.drawable.default_back_icon;
     protected boolean defaultDebugMode = BuildConfig.DEBUG;
+    private ViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +84,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        sb = SlugBinder.getInstance(THIS, container);
+        viewModel = getViewModel();
+        sb = SlugBinder.getInstance(THIS, container, viewModel);
         rootView = sb.getContentView();
         logger.i("\"鼻涕虫\" 初始化消耗 " + (System.currentTimeMillis() - CURRENT_TIME_MILLIS) + "ms");
         return rootView;
@@ -84,6 +94,15 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        protocol = (Protocol) getActivity().getIntent().getSerializableExtra(VIEW_PROTOCOL);
+        if (protocol.getController() != null)
+            try {
+                ControllerProvider.get(protocol.getController());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (java.lang.InstantiationException e) {
+                e.printStackTrace();
+            }
         if (THIS instanceof Standardize) {
             ((Standardize) THIS).setupData((Map<String, Object>) activity.getIntent().getSerializableExtra(INTENT_DATA));
             ((Standardize) THIS).initView();
@@ -138,4 +157,14 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         finishIntent.putExtra(FINISH_PARAMETER_INTENT_DATA, new BaseActivity.FinishParameter());
         THIS.getActivity().sendBroadcast(finishIntent);
     }
+
+    public <T extends Protocol> T getProtocol(Class<T> clazz) {
+        return (T) protocol;
+    }
+
+    public <T extends Controller> T getController(Class<T> clazz) {
+        return (T) controller;
+    }
+
+    public abstract ViewModel getViewModel();
 }

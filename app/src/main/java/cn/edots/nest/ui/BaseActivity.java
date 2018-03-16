@@ -28,8 +28,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.edots.nest.BuildConfig;
+import cn.edots.nest.Controller;
 import cn.edots.nest.Standardize;
+import cn.edots.nest.factory.ControllerProvider;
 import cn.edots.nest.log.Logger;
+import cn.edots.nest.model.protocol.Protocol;
+import cn.edots.nest.model.view.ViewModel;
 import cn.edots.slug.core.activity.SlugBinder;
 
 
@@ -46,6 +50,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public static final String INTENT_DATA = "INTENT_DATA";
     public static final String DEFAULT_BACK_ICON = "BACK_ICON";
     public static final String DEFAULT_DEBUG_MODE = "DEBUG_MODE";
+    public static final String VIEW_PROTOCOL = "VIEW_PROTOCOL";
+
+    private Protocol protocol;
+    private Controller controller;
+    private ViewModel viewModel;
 
     protected final long CURRENT_TIME_MILLIS = System.currentTimeMillis();
     protected final Activity THIS = this;
@@ -80,9 +89,20 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         } catch (Exception e) {
             e.printStackTrace();
         }
+        protocol = (Protocol) getIntent().getSerializableExtra(VIEW_PROTOCOL);
+        if (protocol != null && protocol.getController() != null)
+            try {
+                controller = ControllerProvider.get(protocol.getController());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            }
+        if (controller != null) controller.initialize();
         logger = Logger.getInstance(TAG, defaultDebugMode);
         registerFinishBroadcast();
-        sb = SlugBinder.getInstance(this);
+        viewModel = getViewModel();
+        sb = SlugBinder.getInstance(this, viewModel);
         if (THIS instanceof Standardize) {
             ((Standardize) THIS).setupData((Map<String, Object>) getIntent().getSerializableExtra(INTENT_DATA));
             ((Standardize) THIS).initView();
@@ -107,6 +127,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onDestroy();
         unregisterFinishBroadcast();
         if (sb != null) sb.finish();
+        if (controller != null) controller.destroy();
     }
 
     private void registerFinishBroadcast() {
@@ -162,6 +183,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         THIS.startActivity(intent);
     }
 
+    public void startActivity(Class<? extends Activity> clazz, Protocol protocol) {
+        Intent intent = new Intent(THIS, clazz);
+        intent.putExtra(VIEW_PROTOCOL, protocol);
+        THIS.startActivity(intent);
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         return super.dispatchTouchEvent(event);
@@ -204,6 +231,20 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected void replaceFragment(@IdRes int layoutId, Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(layoutId, fragment).commit();
     }
+
+    public <T extends Protocol> T getProtocol(Class<T> clazz) {
+        return (T) this.protocol;
+    }
+
+    public <T extends Controller> T getController(Class<T> clazz) {
+        return (T) this.controller;
+    }
+
+    public <T extends ViewModel> T getViewModel(Class<T> clazz) {
+        return (T) this.viewModel;
+    }
+
+    public abstract ViewModel getViewModel();
 
     //======================================================
     // inner class

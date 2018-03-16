@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.edots.nest.R;
+import cn.edots.nest.model.view.ViewModel;
 
 /**
  * @author Parck.
@@ -47,6 +48,11 @@ public class EmptyFragment extends BaseFragment {
             emptyImage.setOnClickListener(onClickListener);
             emptyText.setOnClickListener(onClickListener);
         }
+    }
+
+    @Override
+    public ViewModel getViewModel() {
+        return null;
     }
 
     public int getResId() {
