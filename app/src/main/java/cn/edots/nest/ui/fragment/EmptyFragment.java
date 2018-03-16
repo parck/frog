@@ -18,7 +18,7 @@ import cn.edots.nest.R;
  * @desc
  */
 
-public class EmptyFragment extends Fragment {
+public class EmptyFragment extends BaseFragment {
 
     protected ImageView emptyImage;
     protected TextView emptyText;
