@@ -5,10 +5,10 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/example/example.iml" filepath="$PROJECT_DIR$/example/example.iml" />
       <module fileurl="file://G:\Project\Client\nest-android\nest.iml" filepath="G:\Project\Client\nest-android\nest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/nest-android.iml" filepath="$PROJECT_DIR$/nest-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/nest-android.iml" filepath="$PROJECT_DIR$/.idea/nest-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/test/test.iml" filepath="$PROJECT_DIR$/test/test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example/test.iml" filepath="$PROJECT_DIR$/example/test.iml" />
+      <module fileurl="file://E:\Project\Client\nest-android\nest-android.iml" filepath="E:\Project\Client\nest-android\nest-android.iml" />
+      <module fileurl="file://E:\Project\Client\nest-android\test\test.iml" filepath="E:\Project\Client\nest-android\test\test.iml" />
+      <module fileurl="file://E:\Project\Client\nest-android\example\test.iml" filepath="E:\Project\Client\nest-android\example\test.iml" />
     </modules>
   </component>
 </project>

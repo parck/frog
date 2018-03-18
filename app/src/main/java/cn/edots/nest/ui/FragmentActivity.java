@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import cn.edots.nest.R;
+import cn.edots.nest.model.view.ViewModel;
 
 /**
  * @author Parck.
@@ -12,7 +13,7 @@ import cn.edots.nest.R;
  * @desc
  */
 
-public abstract class FragmentActivity extends TitleBarActivity {
+public abstract class FragmentActivity<VM extends ViewModel> extends TitleBarActivity<VM> {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

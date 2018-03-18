@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import cn.edots.nest.R;
 import cn.edots.nest.cache.Session;
+import cn.edots.nest.model.view.ViewModel;
 import cn.edots.nest.ui.fragment.EmptyFragment;
 
 /**
@@ -27,7 +28,7 @@ import cn.edots.nest.ui.fragment.EmptyFragment;
  * @date 2017/9/28.
  * @desc
  */
-public abstract class TitleBarActivity extends BaseActivity {
+public abstract class TitleBarActivity<VM extends ViewModel> extends BaseActivity<VM> {
 
     public static final int _24SP = 24;
     public static final int _23SP = 23;
@@ -74,7 +75,8 @@ public abstract class TitleBarActivity extends BaseActivity {
             ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
             Bundle metaData = appInfo.metaData;
             if (metaData != null) {
-                defaultBackIconRes = metaData.getInt(DEFAULT_BACK_ICON);
+                int resId = metaData.getInt(DEFAULT_BACK_ICON);
+                if (resId != 0) defaultBackIconRes = resId;
             }
         } catch (Exception e) {
             e.printStackTrace();

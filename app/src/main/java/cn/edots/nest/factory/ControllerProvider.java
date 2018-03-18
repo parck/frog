@@ -15,16 +15,11 @@ public class ControllerProvider {
     protected static AppCachePool<String, Controller> cache = AppCachePool.getInstance().newTAG(ControllerProvider.class.getSimpleName());
 
     public static <T extends Controller> T get(Class<T> clazz) throws IllegalAccessException, InstantiationException {
-        return get(clazz,null);
-    }
-
-    public static <T extends Controller> T get(Class<T> clazz, ViewModel viewModel) throws IllegalAccessException, InstantiationException {
         T t = (T) cache.get(clazz.getSimpleName());
         if (t == null) {
             t = clazz.newInstance();
             cache.put(clazz.getSimpleName(), t);
         }
-        t.setViewModel(viewModel);
         return t;
     }
 }

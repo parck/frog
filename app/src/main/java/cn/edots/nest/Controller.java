@@ -1,5 +1,7 @@
 package cn.edots.nest;
 
+import android.content.Context;
+
 import java.io.Serializable;
 
 import cn.edots.nest.model.view.ViewModel;
@@ -14,6 +16,8 @@ public abstract class Controller<VM extends ViewModel> implements Serializable {
 
     protected VM viewModel;
 
+    protected Context context;
+
     public abstract void initialize();
 
     public abstract void restore();
@@ -26,5 +30,13 @@ public abstract class Controller<VM extends ViewModel> implements Serializable {
 
     public void setViewModel(VM viewModel) {
         this.viewModel = viewModel;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

@@ -56,7 +56,6 @@ public abstract class BaseActivity<VM extends ViewModel> extends AppCompatActivi
     private Protocol protocol;
     private Controller controller;
 
-    protected VM viewModel;
     protected final long CURRENT_TIME_MILLIS = System.currentTimeMillis();
     protected final Activity THIS = this;
     protected final String TAG = this.getClass().getSimpleName();
@@ -66,6 +65,7 @@ public abstract class BaseActivity<VM extends ViewModel> extends AppCompatActivi
     protected SlugBinder sb;
     protected boolean defaultDebugMode = BuildConfig.DEBUG;
     protected Class<VM> clazz;
+    protected VM viewModel;
 
     public BaseActivity() {
 
@@ -106,7 +106,9 @@ public abstract class BaseActivity<VM extends ViewModel> extends AppCompatActivi
         protocol = (Protocol) getIntent().getSerializableExtra(VIEW_PROTOCOL);
         if (protocol != null && protocol.getController() != null)
             try {
-                controller = ControllerProvider.get(protocol.getController(), viewModel);
+                controller = ControllerProvider.get(protocol.getController());
+                controller.setViewModel(viewModel);
+                controller.setContext(this);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {

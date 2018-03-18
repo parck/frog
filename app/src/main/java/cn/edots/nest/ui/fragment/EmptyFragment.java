@@ -19,7 +19,7 @@ import cn.edots.nest.model.view.ViewModel;
  * @desc
  */
 
-public class EmptyFragment extends BaseFragment {
+public class EmptyFragment extends Fragment {
 
     protected ImageView emptyImage;
     protected TextView emptyText;
@@ -48,11 +48,6 @@ public class EmptyFragment extends BaseFragment {
             emptyImage.setOnClickListener(onClickListener);
             emptyText.setOnClickListener(onClickListener);
         }
-    }
-
-    @Override
-    public ViewModel getViewModel() {
-        return null;
     }
 
     public int getResId() {

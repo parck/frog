@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,14 +42,11 @@ import static cn.edots.nest.ui.BaseActivity.VIEW_PROTOCOL;
  * @desc
  */
 
-public abstract class BaseFragment extends Fragment implements View.OnClickListener {
+public abstract class BaseFragment<VM extends ViewModel> extends Fragment implements View.OnClickListener {
 
     protected final String TAG = this.getClass().getSimpleName();
     protected static final String DEFAULT_BACK_ICON = "BACK_ICON";
     protected static final String DEFAULT_DEBUG_MODE = "DEBUG_MODE";
-
-    private Protocol protocol;
-    private Controller controller;
 
     protected long CURRENT_TIME_MILLIS;
     protected Fragment THIS;
@@ -60,7 +58,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @DrawableRes
     int defaultBackIconRes = R.drawable.default_back_icon;
     protected boolean defaultDebugMode = BuildConfig.DEBUG;
-    private ViewModel viewModel;
+    protected VM viewModel;
+    protected Class<VM> clazz;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,7 +83,14 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        viewModel = getViewModel();
+        try {
+            clazz = (Class<VM>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            if (clazz != null) viewModel = clazz.newInstance();
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         sb = SlugBinder.getInstance(THIS, container, viewModel);
         rootView = sb.getContentView();
         logger.i("\"鼻涕虫\" 初始化消耗 " + (System.currentTimeMillis() - CURRENT_TIME_MILLIS) + "ms");
@@ -94,15 +100,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        protocol = (Protocol) getActivity().getIntent().getSerializableExtra(VIEW_PROTOCOL);
-        if (protocol.getController() != null)
-            try {
-                ControllerProvider.get(protocol.getController());
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (java.lang.InstantiationException e) {
-                e.printStackTrace();
-            }
         if (THIS instanceof Standardize) {
             ((Standardize) THIS).setupData((Map<String, Object>) activity.getIntent().getSerializableExtra(INTENT_DATA));
             ((Standardize) THIS).initView();
@@ -158,13 +155,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         THIS.getActivity().sendBroadcast(finishIntent);
     }
 
-    public <T extends Protocol> T getProtocol(Class<T> clazz) {
-        return (T) protocol;
+    public VM getViewModel() {
+        return this.viewModel;
     }
-
-    public <T extends Controller> T getController(Class<T> clazz) {
-        return (T) controller;
-    }
-
-    public abstract ViewModel getViewModel();
 }

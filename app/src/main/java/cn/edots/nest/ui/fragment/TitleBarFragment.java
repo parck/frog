@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.edots.nest.R;
+import cn.edots.nest.model.view.ViewModel;
 
 /**
  * @author Parck.
@@ -22,7 +23,7 @@ import cn.edots.nest.R;
  * @desc
  */
 
-public abstract class TitleBarFragment extends BaseFragment {
+public abstract class TitleBarFragment<VM extends ViewModel> extends BaseFragment<VM> {
 
     public static final int _24SP = 24;
     public static final int _23SP = 23;
