@@ -110,39 +110,39 @@ public abstract class TitleBarFragment<VM extends ViewModel> extends BaseFragmen
         });
     }
 
-    protected void setTitleBarColor(@ColorRes int resId) {
+    public void setTitleBarColor(@ColorRes int resId) {
         titleLayout.setBackgroundColor(THIS.getResources().getColor(resId));
     }
 
-    protected void setTitleLayoutHeight(@DimenRes int resId) {
+    public void setTitleLayoutHeight(@DimenRes int resId) {
         ViewGroup.LayoutParams layoutParams = titleLayout.getLayoutParams();
         layoutParams.height = getResources().getDimensionPixelSize(resId);
         titleLayout.setLayoutParams(layoutParams);
     }
 
-    protected void setTitleLayoutPixelSizeHeight(int pixel) {
+    public void setTitleLayoutPixelSizeHeight(int pixel) {
         ViewGroup.LayoutParams layoutParams = titleLayout.getLayoutParams();
         layoutParams.height = pixel;
         titleLayout.setLayoutParams(layoutParams);
     }
 
-    protected void setBottomLineShapeResource(@DrawableRes int resId) {
+    public void setBottomLineShapeResource(@DrawableRes int resId) {
         bottomLine.setBackgroundResource(resId);
     }
 
-    protected void showEmpty() {
+    public void showEmpty() {
         showEmpty(0);
     }
 
-    protected void showEmpty(@DrawableRes int resId) {
+    public void showEmpty(@DrawableRes int resId) {
         showEmpty(resId, null);
     }
 
-    protected void showEmpty(@DrawableRes int resId, CharSequence text) {
+    public void showEmpty(@DrawableRes int resId, CharSequence text) {
         showEmpty(resId, text, null);
     }
 
-    protected void showEmpty(@DrawableRes int resId, CharSequence text, View.OnClickListener listener) {
+    public void showEmpty(@DrawableRes int resId, CharSequence text, View.OnClickListener listener) {
         if (resId != 0) emptyImage.setImageResource(resId);
         if (text != null) emptyText.setText(text);
         if (listener != null) {
@@ -152,7 +152,7 @@ public abstract class TitleBarFragment<VM extends ViewModel> extends BaseFragmen
         contentLayout.addView(emptyView);
     }
 
-    protected void hideEmpty() {
+    public void hideEmpty() {
         contentLayout.removeView(emptyView);
     }
 
@@ -161,25 +161,25 @@ public abstract class TitleBarFragment<VM extends ViewModel> extends BaseFragmen
     //===============================================================
 
     /*设置左边图片*/
-    protected void setLeftButtonImageResource(@DrawableRes int resId) {
+    public void setLeftButtonImageResource(@DrawableRes int resId) {
         leftButton.setImageResource(resId);
     }
 
-    protected void setOnLeftButtonClickListener(View.OnClickListener listener) {
+    public void setOnLeftButtonClickListener(View.OnClickListener listener) {
         leftButton.setOnClickListener(listener);
     }
     /*设置左边图片**/
 
     /*设置左边text**/
-    protected void setLeftTextContent(CharSequence text) {
+    public void setLeftTextContent(CharSequence text) {
         setLeftTextContent(text, R.color.default_text_color);
     }
 
-    protected void setLeftTextContent(CharSequence text, @ColorRes int resId) {
+    public void setLeftTextContent(CharSequence text, @ColorRes int resId) {
         setLeftTextContent(text, resId, _16SP);
     }
 
-    protected void setLeftTextContent(CharSequence text, @ColorRes int resId, int spSize) {
+    public void setLeftTextContent(CharSequence text, @ColorRes int resId, int spSize) {
         leftButton.setVisibility(View.GONE);
         leftText.setVisibility(View.VISIBLE);
         leftText.setText(text);
@@ -187,21 +187,21 @@ public abstract class TitleBarFragment<VM extends ViewModel> extends BaseFragmen
         leftText.setTextSize(TypedValue.COMPLEX_UNIT_SP, spSize);
     }
 
-    protected void setOnLeftTextButtonClickListener(View.OnClickListener listener) {
+    public void setOnLeftTextButtonClickListener(View.OnClickListener listener) {
         leftText.setOnClickListener(listener);
     }
     /*设置左边text*/
 
     /*设置左边title*/
-    protected void setLeftTitleContent(CharSequence title) {
+    public void setLeftTitleContent(CharSequence title) {
         setLeftTitleContent(title, R.color.default_text_color);
     }
 
-    protected void setLeftTitleContent(CharSequence title, @ColorRes int resId) {
+    public void setLeftTitleContent(CharSequence title, @ColorRes int resId) {
         setLeftTitleContent(title, resId, _18SP);
     }
 
-    protected void setLeftTitleContent(CharSequence title, @ColorRes int resId, int spSize) {
+    public void setLeftTitleContent(CharSequence title, @ColorRes int resId, int spSize) {
         leftTitle.setVisibility(View.VISIBLE);
         leftTitle.setText(title);
         leftTitle.setTextColor(THIS.getResources().getColor(resId));
@@ -210,15 +210,15 @@ public abstract class TitleBarFragment<VM extends ViewModel> extends BaseFragmen
     /*设置左边title*/
 
     /*设置中间title*/
-    protected void setCenterTitleContent(CharSequence title) {
+    public void setCenterTitleContent(CharSequence title) {
         setCenterTitleContent(title, R.color.default_text_color);
     }
 
-    protected void setCenterTitleContent(CharSequence title, @ColorRes int resId) {
+    public void setCenterTitleContent(CharSequence title, @ColorRes int resId) {
         setCenterTitleContent(title, resId, _18SP);
     }
 
-    protected void setCenterTitleContent(CharSequence title, @ColorRes int resId, int spSize) {
+    public void setCenterTitleContent(CharSequence title, @ColorRes int resId, int spSize) {
         centerTitle.setVisibility(View.VISIBLE);
         centerTitle.setText(title);
         centerTitle.setTextColor(THIS.getResources().getColor(resId));
@@ -228,26 +228,26 @@ public abstract class TitleBarFragment<VM extends ViewModel> extends BaseFragmen
 
 
     /*设置右边图片*/
-    protected void setRightButtonImageResource(@DrawableRes int resId) {
+    public void setRightButtonImageResource(@DrawableRes int resId) {
         rightButton.setVisibility(View.VISIBLE);
         rightButton.setImageResource(resId);
     }
 
-    protected void setOnRightButtonListener(View.OnClickListener listener) {
+    public void setOnRightButtonListener(View.OnClickListener listener) {
         rightButton.setOnClickListener(listener);
     }
     /*设置右边图片*/
 
     /*设置右边text*/
-    protected void setRightTextContent(CharSequence text) {
+    public void setRightTextContent(CharSequence text) {
         setRightTextContent(text, R.color.default_text_color);
     }
 
-    protected void setRightTextContent(CharSequence text, @ColorRes int resId) {
+    public void setRightTextContent(CharSequence text, @ColorRes int resId) {
         setRightTextContent(text, R.color.default_text_color, _16SP);
     }
 
-    protected void setRightTextContent(CharSequence text, @ColorRes int resId, int spSize) {
+    public void setRightTextContent(CharSequence text, @ColorRes int resId, int spSize) {
         rightButton.setVisibility(View.GONE);
         rightText.setVisibility(View.VISIBLE);
         rightText.setText(text);
@@ -255,16 +255,16 @@ public abstract class TitleBarFragment<VM extends ViewModel> extends BaseFragmen
         rightText.setTextSize(TypedValue.COMPLEX_UNIT_SP, spSize);
     }
 
-    protected void setOnRightTextListener(View.OnClickListener listener) {
+    public void setOnRightTextListener(View.OnClickListener listener) {
         rightText.setOnClickListener(listener);
     }
     /*设置右边text*/
 
-    protected boolean isHideBackButton() {
+    public boolean isHideBackButton() {
         return false;
     }
 
-    protected boolean isHideBottomLine() {
+    public boolean isHideBottomLine() {
         return false;
     }
 }

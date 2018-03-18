@@ -18,6 +18,5 @@ public class TestActivity extends TitleBarActivity<TestView> {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setCenterTitleContent("Test Controller");
     }
 }

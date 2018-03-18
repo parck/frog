@@ -167,13 +167,13 @@ public abstract class BaseActivity<VM extends ViewModel> extends AppCompatActivi
         return super.onKeyDown(keyCode, event);
     }
 
-    protected void onExit() {
+    public void onExit() {
         Intent exitIntent = new Intent();
         exitIntent.setAction(EXIT_ACTION);
         THIS.sendBroadcast(exitIntent);
     }
 
-    protected void onBack() {
+    public void onBack() {
         finish();
     }
 
@@ -181,11 +181,11 @@ public abstract class BaseActivity<VM extends ViewModel> extends AppCompatActivi
     public void onClick(View v) {
     }
 
-    protected void TOAST(CharSequence message) {
+    public void TOAST(CharSequence message) {
         Toast.makeText(THIS, message, Toast.LENGTH_SHORT).show();
     }
 
-    protected void TOAST(CharSequence message, @BaseTransientBottomBar.Duration int duration) {
+    public void TOAST(CharSequence message, @BaseTransientBottomBar.Duration int duration) {
         Toast.makeText(THIS, message, duration).show();
     }
 
@@ -210,41 +210,41 @@ public abstract class BaseActivity<VM extends ViewModel> extends AppCompatActivi
         return super.dispatchTouchEvent(event);
     }
 
-    protected boolean isTranslucentStatus() {
+    public boolean isTranslucentStatus() {
         return false;
     }
 
-    protected boolean isFeatureNoTitle() {
+    public boolean isFeatureNoTitle() {
         return false;
     }
 
-    protected boolean isBackAndExit() {
+    public boolean isBackAndExit() {
         return false;
     }
 
-    protected void finishWith(Collection<String> pages) {
+    public void finishWith(Collection<String> pages) {
         Intent finishIntent = new Intent();
         finishIntent.setAction(EXIT_ACTION);
         finishIntent.putExtra(FINISH_PARAMETER_INTENT_DATA, new BaseActivity.FinishParameter(pages));
         THIS.sendBroadcast(finishIntent);
     }
 
-    protected void finishWith(Class clazz) {
+    public void finishWith(Class clazz) {
         Intent finishIntent = new Intent();
         finishIntent.setAction(EXIT_ACTION);
         finishIntent.putExtra(FINISH_PARAMETER_INTENT_DATA, new BaseActivity.FinishParameter(null).add(clazz));
         THIS.sendBroadcast(finishIntent);
     }
 
-    protected void addFragment(@IdRes int layoutId, Fragment fragment) {
+    public void addFragment(@IdRes int layoutId, Fragment fragment) {
         getSupportFragmentManager().beginTransaction().add(layoutId, fragment, fragment.getClass().getSimpleName()).commit();
     }
 
-    protected void removeFragment(Fragment fragment) {
+    public void removeFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
-    protected void replaceFragment(@IdRes int layoutId, Fragment fragment) {
+    public void replaceFragment(@IdRes int layoutId, Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(layoutId, fragment).commit();
     }
 

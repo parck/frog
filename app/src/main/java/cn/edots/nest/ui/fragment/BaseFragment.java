@@ -122,11 +122,11 @@ public abstract class BaseFragment<VM extends ViewModel> extends Fragment implem
     public void onClick(View v) {
     }
 
-    protected void TOAST(CharSequence message) {
+    public void TOAST(CharSequence message) {
         Toast.makeText(THIS.getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    protected void TOAST(CharSequence message, @BaseTransientBottomBar.Duration int duration) {
+    public void TOAST(CharSequence message, @BaseTransientBottomBar.Duration int duration) {
         Toast.makeText(THIS.getActivity(), message, duration).show();
     }
 
@@ -140,15 +140,15 @@ public abstract class BaseFragment<VM extends ViewModel> extends Fragment implem
         THIS.startActivity(intent);
     }
 
-    protected boolean isBackAndExit() {
+    public boolean isBackAndExit() {
         return false;
     }
 
-    protected void onBack() {
+    public void onBack() {
         this.getActivity().finish();
     }
 
-    protected void onExit() {
+    public void onExit() {
         Intent finishIntent = new Intent();
         finishIntent.setAction(EXIT_ACTION);
         finishIntent.putExtra(FINISH_PARAMETER_INTENT_DATA, new BaseActivity.FinishParameter());
