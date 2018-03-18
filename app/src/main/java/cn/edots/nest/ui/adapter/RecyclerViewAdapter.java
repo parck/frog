@@ -72,6 +72,14 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         return this.context;
     }
 
+    public ViewHolder getHolder() {
+        return holder;
+    }
+
+    public void setHolder(ViewHolder holder) {
+        this.holder = holder;
+    }
+
     protected abstract void binding(ViewHolder holder, T data, int position);
 
     //=======================================================================

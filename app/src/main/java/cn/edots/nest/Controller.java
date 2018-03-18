@@ -2,18 +2,29 @@ package cn.edots.nest;
 
 import java.io.Serializable;
 
+import cn.edots.nest.model.view.ViewModel;
+
 /**
  * @Author WETOOP
  * @Date 2018/3/16.
  * @Description
  */
 
-public interface Controller extends Serializable {
+public abstract class Controller<VM extends ViewModel> implements Serializable {
 
-    void initialize();
+    protected VM viewModel;
 
-    void restore();
+    public abstract void initialize();
 
-    void destroy();
+    public abstract void restore();
 
+    public abstract void destroy();
+
+    public VM getViewModel() {
+        return viewModel;
+    }
+
+    public void setViewModel(VM viewModel) {
+        this.viewModel = viewModel;
+    }
 }

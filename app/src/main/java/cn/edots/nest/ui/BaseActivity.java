@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +43,7 @@ import cn.edots.slug.core.activity.SlugBinder;
  * @date 2017/9/28.
  * @desc
  */
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public abstract class BaseActivity<VM extends ViewModel> extends AppCompatActivity implements View.OnClickListener {
 
     public static final String EXIT_ACTION = "EXIT_ACTION";
     public static final String FINISH_PARAMETER_INTENT_DATA = "FINISH_PARAMETER_INTENT_DATA";
@@ -54,8 +55,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     private Protocol protocol;
     private Controller controller;
-    private ViewModel viewModel;
 
+    protected VM viewModel;
     protected final long CURRENT_TIME_MILLIS = System.currentTimeMillis();
     protected final Activity THIS = this;
     protected final String TAG = this.getClass().getSimpleName();
@@ -64,6 +65,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected Logger logger;
     protected SlugBinder sb;
     protected boolean defaultDebugMode = BuildConfig.DEBUG;
+    protected Class<VM> clazz;
+
+    public BaseActivity() {
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +82,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         super.onCreate(savedInstanceState);
+        logger = Logger.getInstance(TAG, defaultDebugMode);
+        registerFinishBroadcast();
         init();
     }
 
@@ -86,30 +94,31 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             if (metaData != null) {
                 defaultDebugMode = metaData.getBoolean(DEFAULT_DEBUG_MODE);
             }
+            clazz = (Class<VM>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            if (clazz != null) viewModel = clazz.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        sb = SlugBinder.getInstance(this, viewModel);
+        logger.i("\"鼻涕虫\" 初始化消耗 " + (System.currentTimeMillis() - CURRENT_TIME_MILLIS) + "ms");
+
         protocol = (Protocol) getIntent().getSerializableExtra(VIEW_PROTOCOL);
         if (protocol != null && protocol.getController() != null)
             try {
-                controller = ControllerProvider.get(protocol.getController());
+                controller = ControllerProvider.get(protocol.getController(), viewModel);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
                 e.printStackTrace();
             }
         if (controller != null) controller.initialize();
-        logger = Logger.getInstance(TAG, defaultDebugMode);
-        registerFinishBroadcast();
-        viewModel = getViewModel();
-        sb = SlugBinder.getInstance(this, viewModel);
         if (THIS instanceof Standardize) {
             ((Standardize) THIS).setupData((Map<String, Object>) getIntent().getSerializableExtra(INTENT_DATA));
             ((Standardize) THIS).initView();
             ((Standardize) THIS).setListeners();
             ((Standardize) THIS).onCreateLast();
         }
-        logger.i("\"鼻涕虫\" 初始化消耗 " + (System.currentTimeMillis() - CURRENT_TIME_MILLIS) + "ms");
     }
 
     @Override
@@ -128,6 +137,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         unregisterFinishBroadcast();
         if (sb != null) sb.finish();
         if (controller != null) controller.destroy();
+        controller = null;
+        viewModel = null;
+        protocol = null;
+        sb = null;
+        System.gc();
     }
 
     private void registerFinishBroadcast() {
@@ -240,11 +254,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         return (T) this.controller;
     }
 
-    public <T extends ViewModel> T getViewModel(Class<T> clazz) {
-        return (T) this.viewModel;
+    public VM getViewModel() {
+        return this.viewModel;
     }
-
-    public abstract ViewModel getViewModel();
 
     //======================================================
     // inner class
