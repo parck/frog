@@ -114,8 +114,12 @@ public abstract class BaseActivity<VM extends ViewModel> extends AppCompatActivi
             } catch (InstantiationException e) {
                 e.printStackTrace();
             }
-        if (controller != null) controller.initialize();
-        if (THIS instanceof Standardize) {
+        if (controller instanceof Standardize) {
+            ((Standardize) controller).setupData((Map<String, Object>) getIntent().getSerializableExtra(INTENT_DATA));
+            ((Standardize) controller).initView();
+            ((Standardize) controller).setListeners();
+            ((Standardize) controller).onCreateLast();
+        } else if (THIS instanceof Standardize) {
             ((Standardize) THIS).setupData((Map<String, Object>) getIntent().getSerializableExtra(INTENT_DATA));
             ((Standardize) THIS).initView();
             ((Standardize) THIS).setListeners();
@@ -248,12 +252,12 @@ public abstract class BaseActivity<VM extends ViewModel> extends AppCompatActivi
         getSupportFragmentManager().beginTransaction().replace(layoutId, fragment).commit();
     }
 
-    public <T extends Protocol> T getProtocol(Class<T> clazz) {
-        return (T) this.protocol;
+    public Protocol getProtocol() {
+        return this.protocol;
     }
 
-    public <T extends Controller> T getController(Class<T> clazz) {
-        return (T) this.controller;
+    public Controller getController() {
+        return this.controller;
     }
 
     public VM getViewModel() {

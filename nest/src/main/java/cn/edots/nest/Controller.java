@@ -18,11 +18,9 @@ public abstract class Controller<VM extends ViewModel> implements Serializable {
 
     protected Context context;
 
-    public abstract void initialize();
+    public void destroy() {
 
-    public abstract void restore();
-
-    public abstract void destroy();
+    }
 
     public VM getViewModel() {
         return viewModel;
