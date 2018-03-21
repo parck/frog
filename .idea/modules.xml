@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://G:\Project\Client\nest-android\nest\app.iml" filepath="G:\Project\Client\nest-android\nest\app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example/example.iml" filepath="$PROJECT_DIR$/example/example.iml" />
       <module fileurl="file://$PROJECT_DIR$/nest/nest.iml" filepath="$PROJECT_DIR$/nest/nest.iml" />
       <module fileurl="file://G:\Project\Client\nest-android\nest.iml" filepath="G:\Project\Client\nest-android\nest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/nest-android.iml" filepath="$PROJECT_DIR$/.idea/nest-android.iml" />

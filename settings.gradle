@@ -1,1 +1,1 @@
-include ':nest', ':example'
+include ':nest'
